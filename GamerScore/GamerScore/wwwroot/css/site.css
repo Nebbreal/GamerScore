@@ -17,11 +17,19 @@ html {
   min-height: 100%;
 }
 
+
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    
+    /*Default font=inter-regular*/
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
 }
 
-//Fonts
+/*Fonts*/
 .madimi-one-regular {
     font-family: "Madimi One", sans-serif;
     font-weight: 400;
@@ -51,7 +59,7 @@ body {
     font-style: normal;
     font-variation-settings: "slnt" 0;
 }
-
+/* Colors */
 .primary-bg {
     background-color: #4BBC88;
 }

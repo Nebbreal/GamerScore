@@ -1,0 +1,11 @@
+﻿input.login {
+    width: 40rem;
+    height: 3.5rem;
+    border-radius: 0.1875rem;
+    border: 2px solid rgba(0, 0, 0, 0.29);
+}
+
+button.login{
+    width: 27.25rem;
+    height: 3.6875rem;
+}

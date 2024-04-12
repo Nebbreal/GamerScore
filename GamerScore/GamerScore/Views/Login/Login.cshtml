@@ -3,34 +3,24 @@
     ViewData["Title"] = "Login";
 }
 
-<html lang="en">
-    <head>
-        <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
-    </head>
+@section Styles{
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
 
-    <body>
-        <div class="d-flex flex-column">
-            <h1 class="text-center">Login</h1>
-            <form method="post" asp-controller="Login" asp-action="Login" class="d-flex flex-column mx-auto mt-5">
-                <label for="Email">Email</label>
-                <input for="Email" class="login" placeholder="Enter your email here..." />
-                <label for="Password">Password</label>
-                <input type="password" class="login" for="Password" placeholder="Enter your password here..." />
+<div class="d-flex flex-column">
+    <h1 class="text-center">Login</h1>
+    <form method="post" asp-controller="Login" asp-action="Login" class="d-flex flex-column mx-auto mt-5">
+        <label for="Email">Email</label>
+        <input for="Email" class="login" placeholder="Enter your email here..." />
+        <label for="Password">Password</label>
+        <input type="password" class="login" for="Password" placeholder="Enter your password here..." />
 
-                <div class="d-flex mt-3 justify-content-center">
-                    <button type="submit" class="secondary-bg btn login">Submit</button>
-                </div>
-                <div class="mx-auto">
-                    <p class="mt-2 mb-0">Don't have an account? <a class="complementary-txt" asp-controller="Login" asp-action="SignUp">Sign up here!</a></p>
-                    <p>Forgot your password? <a class="complementary-txt" asp-controller="Login" asp-action="PasswordReset">Click here!</a></p>
-                </div>
-            </form>
+        <div class="d-flex mt-3 justify-content-center">
+            <button type="submit" class="secondary-bg btn login">Submit</button>
         </div>
-    </body>
-</html>
-
-
-
-
-
-
+        <div class="mx-auto">
+            <p class="mt-2 mb-0">Don't have an account? <a class="complementary-txt" asp-controller="Login" asp-action="SignUp">Sign up here!</a></p>
+            <p>Forgot your password? <a class="complementary-txt" asp-controller="Login" asp-action="PasswordReset">Click here!</a></p>
+        </div>
+    </form>
+</div>

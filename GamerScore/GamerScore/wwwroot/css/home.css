@@ -1,9 +1,16 @@
-﻿.item-container{
+﻿.scroll-arrow{
+    width: 3.3rem;
+    height:auto;
+    margin-bottom: 0.5rem;
+}
+
+.item-container{
     display:flex;
     flex-direction:column;
     margin-bottom: 0;
     margin-top: 0;
 }
+
 .item-container-top {
     width: 10.625rem;
     height: 6.0625rem;
@@ -12,6 +19,7 @@
     border-radius: 0.1875rem;
     background-color: #4BBC88;
 }
+
 .item-container-bottom {
     width: 10.625rem;
     height: 14.6875rem;
@@ -20,12 +28,14 @@
     border-radius: 0.1875rem;
     background-color: #D3D1E3;
 }
+
 .item-image {
     height: 15.4375rem;
     width: 9.49625rem;
     margin-top: -5rem;
     position: relative;
 }
+
 .item-text {
     margin-left: 0.2rem;
     width:100%;
@@ -37,6 +47,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .itemlist-container {
     display: grid;
     column-gap: 1.2rem;
@@ -45,4 +56,10 @@
     grid-auto-flow: column;
     grid-auto-columns: minmax(10rem,1fr);
     overflow-x: auto;
+    /*Disable scrollbar*/
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}
+.itemlist-container::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
 }

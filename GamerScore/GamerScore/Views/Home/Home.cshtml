@@ -1,86 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<html lang="en">
-    <head>
-        <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-    </head>
 
-    <body>
-        <h1 class="title-txt fst-italic inter-bold">Home</h1>
-        <p class="fst-italic inter-regular">An overview of all your favourite reviewable games</p>
-        <h2 class="inter-regular header-text">Newly added</h2>
-        <div class="itemlist-container">
-            <div class="item-container">
-                <div class="item-container-top"></div>
-                <div class="d-flex align-items-center flex-column item-container-bottom">
-                    <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                    <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-                </div>
+@section Styles{
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Home</h1>
+<p class="fst-italic inter-regular">An overview of all your favourite reviewable games</p>
+
+<div class="d-flex flex-row align-items-center">
+    <h2 class="inter-regular header-text">Newly added</h2>
+    <div class="ms-auto">
+        <button class="bg-transparent border-0" onclick="ScrollLeft()">
+            <img class="flip-horizontal scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
+        </button>
+        <button class="bg-transparent border-0" onclick="ScrollRight()">
+            <img class="scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
+        </button>
+    </div>
+            
+</div>
+
+<div id="newlyAddedItemList" class="itemlist-container">
+    <div class="item-container">
+        <div class="item-container-top"></div>
+        <div class="d-flex align-items-center flex-column item-container-bottom">
+            <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
+            <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
+        </div>
+    </div>
+
+    @for (int i = 0; i<20; i++)
+    {
+        <div class="item-container">
+            <div class="item-container-top"></div>
+            <div class="d-flex align-items-center flex-column item-container-bottom">
+                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
+                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
             </div>
+        </div>
+    }
+    
 
 
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
+</div>
 
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-        <div class="item-container">
-            <div class="item-container-top"></div>
-            <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-            </div>
-        </div>
-
-        </div>
-        
-    </body>
-</html>
-
+@section Scripts{
+    <script src="~/js/Converter.js" asp-append-version="true"></script>
+    <script src="~/js/home.js" type="text/javascript" asp-append-version="true"></script>
+}

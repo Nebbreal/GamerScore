@@ -10,12 +10,10 @@ namespace GamerScore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ConnectionStrings _connectionStrings;
 
-        public HomeController(ILogger<HomeController> logger, IOptions<ConnectionStrings> connectionStrings)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _connectionStrings = connectionStrings.Value;
         }
 
         public IActionResult Home()

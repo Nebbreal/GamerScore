@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SignUpViewModel
+
+@{
     ViewData["Title"] = "Sign up";
 }
 @section Styles{
@@ -9,16 +11,16 @@
     <h1 class="text-center">Sign up</h1>
     <form method="post" asp-controller="Login" asp-action="SignUp" class="d-flex flex-column mx-auto mt-5">
         <!--Email-->
-        <label for="Email">Email</label>
-        <input for="Email" class="login" placeholder="Enter your email here..." />
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" class="login" placeholder="Enter your email here..." />
         <!--Username-->
-        <label for="Username">Username</label>
-        <input for="Username" class="login" placeholder="Enter your name here..." />
+        <label asp-for="Username">Username</label>
+        <input asp-for="Username" class="login" placeholder="Enter your name here..." />
         <!--Password-->
-        <label for="Password">Password</label>
-        <input type="password" class="login" for="Password" placeholder="Enter your password here..." />
-        <label for="Password">Password</label>
-        <input type="password" class="login" for="Password" placeholder="Confirm your password..." />
+        <label asp-for="Password">Password</label>
+        <input asp-for="Password" type="password" class="login" placeholder="Enter your password here..." />
+        @* <label for="Password">Password</label>
+        <input type="password" class="login" placeholder="Confirm your password..." /> *@
 
         <div class="d-flex mt-3 justify-content-center">
             <button type="submit" class="primary-bg btn login">Submit</button>

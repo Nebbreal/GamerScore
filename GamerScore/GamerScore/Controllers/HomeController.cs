@@ -1,5 +1,8 @@
 using GamerScore.Models;
+using GamerScore.Options;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Configuration;
 using System.Diagnostics;
 
 namespace GamerScore.Controllers
@@ -7,10 +10,12 @@ namespace GamerScore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ConnectionStrings _connectionStrings;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IOptions<ConnectionStrings> connectionStrings)
         {
             _logger = logger;
+            _connectionStrings = connectionStrings.Value;
         }
 
         public IActionResult Home()

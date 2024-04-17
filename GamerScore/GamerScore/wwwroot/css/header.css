@@ -1,0 +1,15 @@
+﻿.search-input{
+    width: 20em;
+    text-align: start;
+    background-image: url('../icons/search.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    text-indent: 20px;
+}
+
+.logo-first-color {
+    color: #7970CA;
+}
+.logo-second-color {
+    color: #107D4B;
+}

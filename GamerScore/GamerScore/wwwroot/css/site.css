@@ -1,0 +1,98 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+
+body {
+    margin-bottom: 60px;
+    
+    /*Default font=inter-regular*/
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+/*Fonts*/
+.madimi-one-regular {
+    font-family: "Madimi One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.inter-regular {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+.inter-bold {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+.inter-light {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+/* Colors */
+.primary-bg {
+    background-color: #4BBC88;
+}
+
+.secondary-bg {
+    background-color: #A1B3DC;
+}
+
+.complementary-bg {
+    background-color: #7970CA
+}
+
+.primary-txt {
+    color: #4BBC88;
+}
+
+.secondary-txt {
+    color: #A1B3DC;
+}
+
+.complementary-txt {
+    color: #7970CA
+}
+
+/*General css*/
+.title-txt{
+    font-size: 3rem;
+    margin-bottom: -0.5rem;
+}
+.header-txt {
+    font-size: 2rem;
+    margin-bottom: -0.5rem;
+}
+.flip-horizontal{
+    transform: scaleX(-1);
+}

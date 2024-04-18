@@ -1,4 +1,5 @@
-﻿using GamerScore.DAL;
+﻿using Gamerscore.Core;
+using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,8 @@ namespace GamerScore.Controllers
         public IActionResult SignUp(SignUpViewModel model)
         {
             AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-            BasicDB basicDB = new(_connectionStrings.DBConnectionString);
-            basicDB.ConnectionTest();
-            accountDB.CreateUser(model.Username, model.Email, model.Password);
+            LoginManager loginManager = new();
+            //accountDB.CreateUser(model.Username, model.Email, model.Password);
             return RedirectToAction("Login");
         }
 

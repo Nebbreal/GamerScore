@@ -10,4 +10,8 @@
     <PackageReference Include="MySqlConnector" Version="2.3.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Gamerscore.Core\Gamerscore.Core.csproj" />
+  </ItemGroup>
+
 </Project>

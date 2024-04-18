@@ -1,8 +1,9 @@
-﻿using MySqlConnector;
+﻿using Gamerscore.Core.Interfaces;
+using MySqlConnector;
 
 namespace GamerScore.DAL
 {
-    public class BasicDB
+    public class BasicDB : IBasicDB
     {
         private readonly string connectionString;
         public BasicDB(string _connectionString)
@@ -10,24 +11,43 @@ namespace GamerScore.DAL
             this.connectionString = _connectionString;
         }
 
-        public void ConnectionTest()
+        public bool ConnectionTest()
         {
             MySqlConnection connection = new MySqlConnection(connectionString);
-            connection.Open();
-            connection.Close();
+            try
+            {
+                connection.Open();   
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+            finally
+            { connection.Close(); }
         }
 
-        public void ExecuteNonQuery(string _query)
+        public bool ExecuteNonQuery(string _query)
         {
             using MySqlConnection connection = new MySqlConnection(connectionString);
-            connection.Open();
+            try
+            {
+                connection.Open();
 
-            using MySqlCommand command = connection.CreateCommand();
-            command.CommandText = _query;
+                using MySqlCommand command = connection.CreateCommand();
+                command.CommandText = _query;
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+            finally { connection.Close(); }
             
-            command.ExecuteNonQuery();
-
-            connection.Close();
         }
     }
 }

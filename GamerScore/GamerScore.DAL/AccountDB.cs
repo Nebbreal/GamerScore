@@ -19,7 +19,7 @@ namespace GamerScore.DAL
         public bool CreateUser(string _username, string _email, string _password)
         {
             BasicDB basicDB = new(connectionString);
-            string query = $"INSERT INTO user (username, email, role, password) VALUES ('{_username}', '{_email}', 'user', '${_password}')";
+            string query = $"INSERT INTO user (username, email, role, password) VALUES ('{_username}', '{_email}', 'user', '{_password}')";
 
             if (basicDB.ExecuteNonQuery(query))
             {

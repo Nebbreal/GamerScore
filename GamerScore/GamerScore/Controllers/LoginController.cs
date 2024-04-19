@@ -36,8 +36,15 @@ namespace GamerScore.Controllers
         {
             AccountDB accountDB = new(_connectionStrings.DBConnectionString);
             LoginManager loginManager = new();
-            //accountDB.CreateUser(model.Username, model.Email, model.Password);
-            return RedirectToAction("Login");
+            if(loginManager.CreateAccount(accountDB, model.Username, model.Email, model.Password))//ToDo: is there a better way to do this?
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+            
         }
 
         public IActionResult PasswordReset()

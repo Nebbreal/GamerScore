@@ -1,4 +1,5 @@
-﻿using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
 using MySqlConnector;
 
 namespace GamerScore.DAL
@@ -16,16 +17,20 @@ namespace GamerScore.DAL
             MySqlConnection connection = new MySqlConnection(connectionString);
             try
             {
-                connection.Open();   
+                connection.Open();
+                MessageLogger.Log("Connection opened");
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                MessageLogger.Log("Exception caught testing connection: " + e.ToString());
                 return false;
             }
             finally
-            { connection.Close(); }
+            { 
+                connection.Close();
+                MessageLogger.Log("Connection closed");
+            }
         }
 
         public bool ExecuteNonQuery(string _query)
@@ -34,7 +39,7 @@ namespace GamerScore.DAL
             try
             {
                 connection.Open();
-
+                MessageLogger.Log("Connection opened");
                 using MySqlCommand command = connection.CreateCommand();
                 command.CommandText = _query;
                 command.ExecuteNonQuery();
@@ -43,10 +48,14 @@ namespace GamerScore.DAL
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.ToString());
+                MessageLogger.Log($"Exception caught trying to execute query: {_query} Exception:" + e.ToString());
                 return false;
             }
-            finally { connection.Close(); }
+            finally 
+            { 
+                connection.Close();
+                MessageLogger.Log("Connection closed");
+            }
         }
     }
 }

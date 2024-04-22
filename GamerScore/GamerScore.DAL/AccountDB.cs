@@ -1,4 +1,5 @@
-﻿using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,8 @@ namespace GamerScore.DAL
             try
             {
                 connection.Open();
+                MessageLogger.Log("Connection opened");
+
                 using MySqlCommand command = connection.CreateCommand();
                 command.CommandText = query;
                 MySqlDataReader reader = command.ExecuteReader();
@@ -47,13 +50,14 @@ namespace GamerScore.DAL
                     passwordHash = reader["password"].ToString() ?? "Password not found";
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine("error: " + ex.ToString());
+                MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
             }
             finally
             {
                 connection.Close();
+                MessageLogger.Log("Connection closed");
             }
             return passwordHash;
         }

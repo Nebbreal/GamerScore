@@ -30,5 +30,32 @@ namespace GamerScore.DAL
                 return false;
             }
         }
+
+        public string GetPasswordHash(string _email)
+        { 
+            string query = $"SELECT password FROM user WHERE email = '{_email}';";
+            string passwordHash = "Password not found";
+            MySqlConnection connection = new(connectionString);
+            try
+            {
+                connection.Open();
+                using MySqlCommand command = connection.CreateCommand();
+                command.CommandText = query;
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    passwordHash = reader["password"].ToString() ?? "Password not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error: " + ex.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return passwordHash;
+        }
     }
 }

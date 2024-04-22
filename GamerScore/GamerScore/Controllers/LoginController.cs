@@ -21,9 +21,18 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string _email, string _password)
-        { 
-            return View(); 
+        public IActionResult Login(LoginViewModel _model)
+        {
+            AccountDB accountDB = new(_connectionStrings.DBConnectionString);
+            LoginManager loginManager = new();
+            if (loginManager.Login(accountDB, _model.Email, _model.Password))
+            {
+                return RedirectToAction("Home", "Home");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult SignUp()
@@ -32,11 +41,11 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(SignUpViewModel model)
+        public IActionResult SignUp(SignUpViewModel _model)
         {
             AccountDB accountDB = new(_connectionStrings.DBConnectionString);
             LoginManager loginManager = new();
-            if(loginManager.CreateAccount(accountDB, model.Username, model.Email, model.Password))//ToDo: is there a better way to do this?
+            if(loginManager.CreateAccount(accountDB, _model.Username, _model.Email, _model.Password))//ToDo: is there a better way to do this?
             {
                 return RedirectToAction("Login");
             }

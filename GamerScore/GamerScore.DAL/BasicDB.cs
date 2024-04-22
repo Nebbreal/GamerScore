@@ -47,7 +47,6 @@ namespace GamerScore.DAL
                 return false;
             }
             finally { connection.Close(); }
-            
         }
     }
 }

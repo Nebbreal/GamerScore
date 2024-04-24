@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gamerscore.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace Gamerscore.Core.Interfaces
     {
         public bool CreateUser(string _username, string _email, string _password);
         public string GetPasswordHash(string _email);
+        public User GetAccountInfo(string _email);
     }
 }

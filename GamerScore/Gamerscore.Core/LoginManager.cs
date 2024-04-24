@@ -1,7 +1,7 @@
-﻿using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core.Enums;
+using Gamerscore.Core.Interfaces;
 using Gamerscore.Core.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Reflection;
 
 namespace Gamerscore.Core
 {
@@ -18,27 +18,33 @@ namespace Gamerscore.Core
             return true;
         }
 
-        public bool Login(IAccountDB _accountDB, string _email, string _password)
+        //Takes the email and password to check if the user is allowde to login, if the log in is succesful we pass the accountId and role to use for a Jwt token later
+        public (bool result, int accountId, UserRole role) checkLogin(IAccountDB _accountDB, string _email, string _password)
         {
             string passwordHash = _accountDB.GetPasswordHash(_email);
 
-            if (passwordHash == "Password not found") //ToDo: is there a better way to do this part 2?
+            if (passwordHash == "Password not found")
             {
-                return false;
+                return (false, -1, UserRole.None);
             }
             else
             {
                 User user = new(_email);
                 PasswordHasher<User> passwordHasher = new();
                 PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, passwordHash, _password);
-
+               
                 if(result == PasswordVerificationResult.Success)
                 {
-                    return true;
+                    User userInfo = _accountDB.GetAccountInfo(_email);
+                    if (userInfo.Id == null)
+                    {
+                        return (false, -1, UserRole.None);
+                    }
+                    return (true, (int)userInfo.Id, userInfo.Role);
                 }
                 else
                 {
-                    return false;
+                    return (false, -1, UserRole.None);
                 }
             }
         }

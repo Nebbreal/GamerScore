@@ -1,12 +1,11 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Models;
+using Gamerscore.Core.Enums;
 using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -31,7 +30,7 @@ namespace GamerScore.Controllers
         public IActionResult Login(LoginViewModel _model)
         {
             //Model validation
-            if(_model.Email.Length < 1 || _model.Password.Length < 0)
+            if(_model.Email.Length < 1 || _model.Password.Length < 1)
             {
                 string error = "Email or password is missing";
                 _model.ErrorMessage = error;
@@ -41,8 +40,17 @@ namespace GamerScore.Controllers
             {
                 AccountDB accountDB = new(_connectionStrings.DBConnectionString);
                 LoginManager loginManager = new();
-                if (loginManager.Login(accountDB, _model.Email, _model.Password))
+
+                bool loginResult;
+                int accountId;
+                UserRole role;
+
+                (loginResult, accountId, role) = loginManager.checkLogin(accountDB, _model.Email, _model.Password);
+                if (loginResult)
                 {
+                    //Create jwt token
+                    CreateJwt(_model.Email, accountId, role);
+
                     return RedirectToAction("Home", "Home");
                 }
                 else
@@ -87,29 +95,32 @@ namespace GamerScore.Controllers
             return View();
         }
 
-        //private void CreateJwt(string _email, string _hashedPassword, string _accountId)
-        //{
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes(
-        //        "");
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new[]
-        //        {
-        //            new Claim("Email", email),
-        //            new Claim("AccountId", u.ToString())
-        //        }),
-        //        Expires = DateTime.UtcNow.AddDays(expirationTime),
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-        //            SecurityAlgorithms.HmacSha256Signature)
-        //    };
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    var tokenstring = tokenHandler.WriteToken(token);
-        //    Response.Cookies.Append("jwtToken", tokenstring, new CookieOptions
-        //    {
-        //        Expires = DateTime.UtcNow.AddDays(expirationTime),
-        //        HttpOnly = true //Cookie can only be found in an http request
-        //    });
-        //}
+        private void CreateJwt(string _email, int _accountId, UserRole _role)
+        {
+            int expirationTime = 1;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(
+                $"{_jwtSettings.Key}");
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim("Email", _email),
+                    new Claim("AccountId", _accountId.ToString()),
+                    new Claim("Role", _role.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenstring = tokenHandler.WriteToken(token);
+            Response.Cookies.Append("jwtToken", tokenstring, new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddMinutes(expirationTime),
+                HttpOnly = true //Cookie can only be found in an http request
+            });
+        }
     }
 }

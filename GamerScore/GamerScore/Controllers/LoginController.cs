@@ -10,10 +10,11 @@ namespace GamerScore.Controllers
     public class LoginController : Controller
     {
         private readonly ConnectionStrings _connectionStrings;
-        
-        public LoginController(IOptions<ConnectionStrings> connectionStrings)
+        private readonly JwtSettings _jwtSettings;
+        public LoginController(IOptions<ConnectionStrings> connectionStrings, IOptions<JwtSettings> jwt)
         {
             this._connectionStrings = connectionStrings.Value;
+            this._jwtSettings = jwt.Value;
         }
         public IActionResult Login()
         {
@@ -23,17 +24,30 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel _model)
         {
-            AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-            LoginManager loginManager = new();
-            if (loginManager.Login(accountDB, _model.Email, _model.Password))
+            //Model validation
+            if(_model.Email.Length < 1 || _model.Password.Length < 0)
             {
-                return RedirectToAction("Home", "Home");
+                string error = "Email or password is missing";
+                _model.ErrorMessage = error;
+                return View(_model);
             }
             else
             {
-                return View();
+                AccountDB accountDB = new(_connectionStrings.DBConnectionString);
+                LoginManager loginManager = new();
+                if (loginManager.Login(accountDB, _model.Email, _model.Password))
+                {
+                    return RedirectToAction("Home", "Home");
+                }
+                else
+                {
+                    string error = "Email or password is incorrect";
+                    _model.ErrorMessage = error;
+                    return View(_model);
+                }
             }
         }
+
 
         public IActionResult SignUp()
         {

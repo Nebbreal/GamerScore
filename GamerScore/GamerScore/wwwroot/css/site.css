@@ -69,7 +69,11 @@ body {
 }
 
 .complementary-bg {
-    background-color: #7970CA
+    background-color: #7970CA;  
+}
+
+.error-bg {
+    background-color: #F35353;
 }
 
 .primary-txt {
@@ -89,10 +93,26 @@ body {
     font-size: 3rem;
     margin-bottom: -0.5rem;
 }
+
 .header-txt {
     font-size: 2rem;
     margin-bottom: -0.5rem;
 }
+
 .flip-horizontal{
     transform: scaleX(-1);
+}
+
+.error-box {
+    display: flex;
+    align-items: center;
+
+    background-color: #F35353;
+
+    margin-top: .5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: .2rem;
+
+    text-indent: 0.5rem;
 }

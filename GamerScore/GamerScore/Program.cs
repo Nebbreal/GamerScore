@@ -1,9 +1,9 @@
 using GamerScore.Options;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
-// Add services to the container.
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

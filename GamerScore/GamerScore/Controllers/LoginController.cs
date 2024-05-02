@@ -6,11 +6,6 @@ using GamerScore.Options;
 using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace GamerScore.Controllers
 {
@@ -109,12 +104,6 @@ namespace GamerScore.Controllers
         {
             return View();
         }
-
-        private void CreateJwt(string _email, int _accountId, UserRole _role)
-        {
-            
-        }
-
 
     }
 }

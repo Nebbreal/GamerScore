@@ -1,4 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@using System.IdentityModel.Tokens.Jwt
+@{
+    var jwtToken = Context.Request.Cookies["jwtToken"];
+    bool isLoggedIn = !string.IsNullOrEmpty(jwtToken);
+
+    bool isAdmin = false;
+
+    if (isLoggedIn)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = handler.ReadJwtToken(jwtToken);
+        var roleClaim = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "Role");
+        isAdmin = roleClaim != null && roleClaim.Value == "Admin";
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -41,14 +57,58 @@
                             <input class="search-input inter-regular input-group-text" placeholder="Search for a game" />
                         </li>
                     </ul>
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item pe-5">
-                            <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="Login" asp-action="Login">Log in</a>
-                        </li>
-                        <li class="nav-item px-2">
-                            <a class="nav-link inter-regular text-dark px-3 primary-bg" asp-area="" asp-controller="Login" asp-action="SignUp">Sign up</a>
-                        </li>
-                    </ul>
+                    @if (isLoggedIn)
+                    {
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <button class="d-flex flex-row container dropdown-container bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img class="img-fluid" src="~/icons/person.svg" />
+                                        <img class="img-fluid dropdown-arrow" src="~/icons/right-arrow.svg" />
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item-size dropdown-item bg-transparent" href="#">
+                                                <div class="d-flex align-items-center">
+                                                    <img class="dropdown-icon" src="~/icons/cog.svg" />
+                                                    <p class="dropdown-text text-black">Settings</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        @if(isAdmin){
+                                            <li>
+                                                <a class="dropdown-item-size dropdown-item bg-transparent" href="#">
+                                                    <div class="d-flex align-items-center">
+                                                        <img class="dropdown-icon" src="~/icons/male-close-up-silhouette-with-tie.svg" />
+                                                        <p class="dropdown-text text-black">Admin panel</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a class="dropdown-item-size dropdown-item bg-transparent" asp-action="LogOut" asp-controller="Login">
+                                                <div class="d-flex align-items-center">
+                                                    <img class="dropdown-icon" src="~/icons/exit.svg" />
+                                                    <p class="dropdown-text text-black">Log out</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item pe-5">
+                                <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="Login" asp-action="Login">Log in</a>
+                            </li>
+                            <li class="nav-item px-2">
+                                <a class="nav-link inter-regular text-dark px-3 primary-bg" asp-area="" asp-controller="Login" asp-action="SignUp">Sign up</a>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>

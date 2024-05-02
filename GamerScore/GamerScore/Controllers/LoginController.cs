@@ -3,9 +3,11 @@ using Gamerscore.Core.Enums;
 using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
+using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -49,7 +51,16 @@ namespace GamerScore.Controllers
                 if (loginResult)
                 {
                     //Create jwt token
-                    CreateJwt(_model.Email, accountId, role);
+                    int expirationTime = 10;
+
+                    TokenService tokenService = new(_jwtSettings);
+                    var token = tokenService.CreateJwt(_model.Email, accountId, role, expirationTime);
+
+                    Response.Cookies.Append("jwtToken", token, new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddMinutes(expirationTime),
+                        HttpOnly = true //Cookie can only be found in an http request
+                    });
 
                     return RedirectToAction("Home", "Home");
                 }
@@ -61,7 +72,11 @@ namespace GamerScore.Controllers
                 }
             }
         }
-
+        public IActionResult LogOut()
+        {
+            Response.Cookies.Delete("jwtToken");
+            return RedirectToAction("Home", "Home");
+        }
 
         public IActionResult SignUp()
         {
@@ -97,30 +112,9 @@ namespace GamerScore.Controllers
 
         private void CreateJwt(string _email, int _accountId, UserRole _role)
         {
-            int expirationTime = 1;
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(
-                $"{_jwtSettings.Key}");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Email", _email),
-                    new Claim("AccountId", _accountId.ToString()),
-                    new Claim("Role", _role.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenstring = tokenHandler.WriteToken(token);
-            Response.Cookies.Append("jwtToken", tokenstring, new CookieOptions
-            {
-                Expires = DateTime.UtcNow.AddMinutes(expirationTime),
-                HttpOnly = true //Cookie can only be found in an http request
-            });
+            
         }
+
+
     }
 }

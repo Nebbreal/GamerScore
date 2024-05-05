@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Add game page";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/addItem.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Add a game</h1>
+<div class="mt-3">
+    <h2 class="header-txt inter-bold mb-1">Name</h2>
+    <input placeholder="Enter the name of the game here..." />
+
+    <h2 class="header-txt inter-bold mb-1">Description</h2>
+    <textarea class="description-input" placeholder="Enter the description of the game here..."></textarea>
+
+    <h2 class="header-txt inter-bold mb-1">Image url</h2>
+    <input placeholder="Enter the image url of the game here..." />
+    
+    <button class="add-button mt-1 d-flex justify-content-center align-items-center">
+        <p class="mb-0">+</p>
+    </button>
+
+    <h2 class="header-txt inter-bold mb-1">Genre</h2>
+    <input placeholder="Select a genre" />
+
+    <button class="add-button mt-1 d-flex justify-content-center align-items-center">
+        <p class="mb-0">+</p>
+    </button>
+
+    <div class="d-flex mt-2 flex-row align-items-center">
+        <button class="action-btn primary-bg d-flex justify-content-center align-items-center ">
+            <p class="mb-0">Save</p>
+        </button>
+
+        <button class="action-btn primary-bg d-flex justify-content-center align-items-center ms-3">
+            <p class="mb-0">Cancel</p>
+        </button>
+    </div>
+    
+</div>

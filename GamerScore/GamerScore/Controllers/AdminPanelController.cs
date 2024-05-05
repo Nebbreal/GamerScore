@@ -13,6 +13,7 @@ namespace GamerScore.Controllers
         {
             this._jwtSettings = jwt.Value;
         }
+
         public IActionResult Panel()
         {
             //Validate if an admin is logged in
@@ -33,6 +34,16 @@ namespace GamerScore.Controllers
                 return RedirectToAction("Home", "Home");
             }
             
+        }
+
+        public IActionResult AddGame()
+        {
+            return View();
+        }
+
+        public IActionResult AddGenre()
+        {
+            return View();
         }
     }
 }

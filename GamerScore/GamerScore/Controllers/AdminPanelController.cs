@@ -1,4 +1,5 @@
-﻿using GamerScore.Options;
+﻿using GamerScore.Models;
+using GamerScore.Options;
 using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -44,6 +45,17 @@ namespace GamerScore.Controllers
         public IActionResult AddGenre()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult AddGenre(AddGenreViewModel _model) 
+        { 
+            if(_model.Name == null)
+            {
+                _model.ErrorMessage = "A name is required";
+                return View(_model);
+            }
+
+            return View(); 
         }
     }
 }

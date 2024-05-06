@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace GamerScore.DAL
 {
@@ -23,46 +24,70 @@ namespace GamerScore.DAL
         public bool CreateUser(string _username, string _email, string _password)
         {
             BasicDB basicDB = new(connectionString);
-            string query = $"INSERT INTO user (username, email, role, password) VALUES ('{_username}', '{_email}', 'user', '{_password}')";
+            string query = $"INSERT INTO user (username, email, role, password) VALUES (@username, @email, 'User', @password)";
 
-            if (basicDB.ExecuteNonQuery(query))
+            using (MySqlConnection connection = new(connectionString))
             {
-                return true;
-            }
-            else
-            {
+                try
+                {
+                    using MySqlCommand command = new MySqlCommand(query, connection);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    command.Parameters.AddWithValue("@username", _username);
+                    command.Parameters.AddWithValue("@email", _email);
+                    command.Parameters.AddWithValue("@password", _password);
+
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
                 return false;
             }
         }
 
         public string GetPasswordHash(string _email)
         { 
-            string query = $"SELECT password FROM user WHERE email = '{_email}';";
+            string query = $"SELECT password FROM user WHERE email = @email;";
             string passwordHash = "Password not found";
-            MySqlConnection connection = new(connectionString);
-            try
-            {
-                connection.Open();
-                MessageLogger.Log("Connection opened");
 
-                using MySqlCommand command = connection.CreateCommand();
-                command.CommandText = query;
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+            using (MySqlConnection connection = new(connectionString))
+            {
+                try
                 {
-                    passwordHash = reader["password"].ToString() ?? "Password not found";
+                    using MySqlCommand command = new MySqlCommand(query, connection);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    command.Parameters.AddWithValue("@email", _email);
+                    MySqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        passwordHash = reader["password"].ToString() ?? "Password not found";
+                    }
                 }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+                return passwordHash;
             }
-            catch (Exception e)
-            {
-                MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
-            }
-            finally
-            {
-                connection.Close();
-                MessageLogger.Log("Connection closed");
-            }
-            return passwordHash;
         }
 
         //Uses the email which it uses to search for the user's accountId and UserRole

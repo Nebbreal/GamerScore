@@ -54,6 +54,10 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _model)
         {
+            GameDB gameDB = new(_connectionStrings.DBConnectionString);
+            GameManager gameManager = new GameManager();
+
+            gameManager.CreateGame(gameDB, _model.Name, _model.Description, _model.Developer, _model.ThumbnailImageUrl, _model.ImageUrl, _model.SelectedGenres);
             return RedirectToAction("Panel");
         }
 

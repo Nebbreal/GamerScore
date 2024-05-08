@@ -16,8 +16,13 @@
         <h2 class="header-txt inter-bold mb-1">Description</h2>
         <textarea required asp-for=Description class="description-input" placeholder="Enter the description of the game here..."></textarea>
 
-        <h2 class="header-txt inter-bold mb-1">Image url</h2>
+        <h2 class="header-txt inter-bold mb-1">Developer</h2>
+        <input required asp-for="Developer" placeholder="Enter the name of the developer of the game here..." />
 
+        <h2 class="header-txt inter-bold mb-1">Thumbnail image url</h2>
+        <input required asp-for="ThumbnailImageUrl" placeholder="Enter the thumbnail image url of the game here..." />
+
+        <h2 class="header-txt inter-bold mb-1">Image url</h2>
         <div id="imageUrlList">
             <div class="d-flex flex-row align-content-center">
                 <input required name="ImageUrl[]" placeholder="Enter the image url of the game here..." />
@@ -61,20 +66,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-    <script>
-        $(document).ready(function () {
-            $('.add-button').click(function (e) {
-                e.preventDefault();
-                $('#imageUrlList').append('<div class="d-flex flex-row align-content-center"><input required name="ImageUrl[]" placeholder="Enter the image url of the game here..." /><button class="remove-button d-flex justify-content-center align-items-center"><p class="mb-0">X</p></button></div>');
-            });
-
-            $(document).on('click', '.remove-button', function (e) {
-                e.preventDefault();
-                $(this).parent().remove();
-            });
-        });
-    </script>
 
     <script src="~/js/AddGame.js" asp-append-version="true"></script>
 }

@@ -6,13 +6,15 @@ namespace GamerScore.Models
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? Developer { get; set; }
+        public string ThumbnailImageUrl { get; set; }
         public List<string>? ImageUrl { get; set; }
         public List<string>? SelectedGenres {  get; set; }
         public List<Genre>? Genres { get; private set; }
 
 
         public AddGameViewModel() { }
-        public AddGameViewModel(string _name, string _description, List<string> _ImageUrl, List<string> _selectedGenres)
+        public AddGameViewModel(string _name, string _description, string _developer, string _thumbnailImageUrl , List<string> _ImageUrl, List<string> _selectedGenres)
         {
             Name = _name;
             Description = _description;

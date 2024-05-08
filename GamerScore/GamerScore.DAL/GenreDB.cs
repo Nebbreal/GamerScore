@@ -100,7 +100,6 @@ namespace GamerScore.DAL
 
         public bool CreateGenre(string _name, string? _imageUrl)//ToDo: turn this into a more general function/edit ExecuteNonQuery?
         {
-            //Change the query so that it is possible to leave the image url empty
             string query = "INSERT INTO genre (name, imageUrl) VALUES (@name, @imageUrl);";
             if (_imageUrl == null)
             {

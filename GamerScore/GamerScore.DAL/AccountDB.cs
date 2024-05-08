@@ -24,7 +24,7 @@ namespace GamerScore.DAL
         public bool CreateUser(string _username, string _email, string _password)
         {
             BasicDB basicDB = new(connectionString);
-            string query = $"INSERT INTO user (username, email, role, password) VALUES (@username, @email, 'User', @password)";
+            string query = "INSERT INTO user (username, email, role, password) VALUES (@username, @email, 'User', @password)";
 
             using (MySqlConnection connection = new(connectionString))
             {
@@ -58,7 +58,7 @@ namespace GamerScore.DAL
 
         public string GetPasswordHash(string _email)
         { 
-            string query = $"SELECT password FROM user WHERE email = @email;";
+            string query = "SELECT password FROM user WHERE email = @email;";
             string passwordHash = "Password not found";
 
             using (MySqlConnection connection = new(connectionString))
@@ -93,7 +93,7 @@ namespace GamerScore.DAL
         //Uses the email which it uses to search for the user's accountId and UserRole
         public User GetAccountInfo(string _email)
         {
-            string query = $"SELECT id, role FROM user WHERE email = @email;";
+            string query = "SELECT id, role FROM user WHERE email = @email;";
 
             using (MySqlConnection connection = new(connectionString))
             {

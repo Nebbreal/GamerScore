@@ -1,4 +1,7 @@
-﻿using GamerScore.Models;
+﻿using Gamerscore.Core;
+using Gamerscore.Core.Models;
+using GamerScore.DAL;
+using GamerScore.Models;
 using GamerScore.Options;
 using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +12,11 @@ namespace GamerScore.Controllers
 {
     public class AdminPanelController : Controller
     {
+        private readonly ConnectionStrings _connectionStrings;
         private readonly JwtSettings _jwtSettings;
-        public AdminPanelController(IOptions<JwtSettings> jwt)
+        public AdminPanelController(IOptions<ConnectionStrings> connectionStrings, IOptions<JwtSettings> jwt)
         {
+            this._connectionStrings = connectionStrings.Value;
             this._jwtSettings = jwt.Value;
         }
 
@@ -39,7 +44,17 @@ namespace GamerScore.Controllers
 
         public IActionResult AddGame()
         {
-            return View();
+            GenreManager genreManager = new();
+            GenreDB genreDB = new(_connectionStrings.DBConnectionString);
+            List<Genre> genres = genreManager.GetAllGenres(genreDB);
+            
+            AddGameViewModel model = new(genres);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult AddGame(AddGameViewModel _model)
+        {
+            return RedirectToAction("Panel");
         }
 
         public IActionResult AddGenre()
@@ -55,7 +70,20 @@ namespace GamerScore.Controllers
                 return View(_model);
             }
 
-            return View(); 
+            GenreDB genreDB = new(_connectionStrings.DBConnectionString);
+            GenreManager genreManager = new GenreManager();
+
+            if(genreManager.CreateGenre(genreDB, _model.Name, _model.ImageUrl))
+            {
+                AddGenreViewModel successModel = new AddGenreViewModel();
+                successModel.SuccessMessage = "Genre creation success!";
+                return View(successModel);
+            }
+            else 
+            {
+                _model.ErrorMessage = "Name already exists or something went wrong";
+                return View(_model);
+            }
         }
     }
 }

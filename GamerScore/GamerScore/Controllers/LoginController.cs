@@ -36,7 +36,7 @@ namespace GamerScore.Controllers
             else
             {
                 AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-                LoginManager loginManager = new();
+                AccountManager loginManager = new();
 
                 bool loginResult;
                 int accountId;
@@ -82,7 +82,7 @@ namespace GamerScore.Controllers
         public IActionResult SignUp(SignUpViewModel _model)
         {
             AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-            LoginManager loginManager = new();
+            AccountManager loginManager = new();
             if(loginManager.CreateAccount(accountDB, _model.Username, _model.Email, _model.Password))//ToDo: is there a better way to do this?
             {
                 return RedirectToAction("Login");

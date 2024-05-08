@@ -76,6 +76,10 @@ body {
     background-color: #F35353;
 }
 
+.success-bg {
+    background-color: #53F376;
+}
+
 .primary-txt {
     color: #4BBC88;
 }
@@ -106,8 +110,6 @@ body {
 .error-box {
     display: flex;
     align-items: center;
-
-    background-color: #F35353;
 
     margin-top: .5rem;
     padding-top: 1rem;

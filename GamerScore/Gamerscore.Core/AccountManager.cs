@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Gamerscore.Core
 {
-    public class LoginManager
+    public class AccountManager
     {
         public bool CreateAccount(IAccountDB _accountDB, string _username, string _email, string _password)
         {

@@ -12,8 +12,14 @@
 
 @if (Model != null && Model.ErrorMessage != null)
 {
-    <div class="error-box">
+    <div class="error-box error-bg">
         <p class="inter-bold mb-0">@Model.ErrorMessage</p>
+    </div>
+}
+@if (Model != null && Model.SuccessMessage != null)
+{
+    <div class="error-box success-bg">
+        <p class="inter-bold mb-0">@Model.SuccessMessage</p>
     </div>
 }
 
@@ -25,13 +31,13 @@
     <input asp-for="ImageUrl" placeholder="Enter the image url of the genre here..." />
 
     <div class="d-flex mt-2 flex-row align-items-center">
-        <button type="submit" class="action-btn primary-bg d-flex justify-content-center align-items-center ">
+        <button type="submit" class="action-button primary-bg d-flex justify-content-center align-items-center ">
             <p class="mb-0">Save</p>
         </button>
 
-        <button class="action-btn primary-bg d-flex justify-content-center align-items-center ms-3">
+        <a asp-action="Panel" asp-controller="AdminPanel" class="action-button primary-bg d-flex justify-content-center align-items-center ms-3">
             <p class="mb-0">Cancel</p>
-        </button>
+        </a>
     </div>
 
 </form>

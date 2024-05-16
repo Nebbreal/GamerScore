@@ -1,17 +1,17 @@
 ﻿using Gamerscore.DTO.Enums;
-using GamerScore.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+using Gamerscore.Core.Interfaces;
 using System.Security.Claims;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GamerScore.Services
 {
     public class TokenService
     {
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJwtSettings _jwtSettings;
 
-        public TokenService(JwtSettings jwtSettings)
+        public TokenService(IJwtSettings jwtSettings)
         {
             _jwtSettings = jwtSettings;
         }

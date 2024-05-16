@@ -1,6 +1,8 @@
-﻿namespace GamerScore.Options
+﻿using Gamerscore.Core.Interfaces;
+
+namespace GamerScore.Options
 {
-    public class JwtSettings
+    public class JwtSettings : IJwtSettings
     {
         public string Key { get; set; }
         public string Issuer { get; set; }

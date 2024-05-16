@@ -1,22 +1,14 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Enums;
 using Gamerscore.Core.Interfaces;
-using Gamerscore.Core.Models;
-using Microsoft.AspNetCore.Identity;
+using Gamerscore.DTO;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GamerScore.DAL
 {
-    public class GenreDB : IGenreDB
+    public class GenreRepository : IGenreRepository
     {
         private readonly string connectionString;
-        public GenreDB(string _connectionString)
+        public GenreRepository(string _connectionString)
         {
             this.connectionString = _connectionString;
         }

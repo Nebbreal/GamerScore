@@ -1,15 +1,13 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
-using Gamerscore.Core.Models;
 using MySqlConnector;
-using System.Xml.Linq;
 
 namespace GamerScore.DAL
 {
-    public class GameDB : IGameDB
+    public class GameRepository : IGameRepository
     {
         private readonly string connectionString;
-        public GameDB(string _connectionString)
+        public GameRepository(string _connectionString)
         {
             this.connectionString = _connectionString;
         }

@@ -1,29 +1,21 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Enums;
+using Gamerscore.DTO.Enums;
 using Gamerscore.Core.Interfaces;
-using Gamerscore.Core.Models;
-using Microsoft.AspNetCore.Identity;
+using Gamerscore.DTO;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GamerScore.DAL
 {
-    public class AccountDB : IAccountDB
+    public class AccountRepository : IAccountRepository
     {
         private readonly string connectionString;
-        public AccountDB(string _connectionString) 
+        public AccountRepository(string _connectionString) 
         {
             this.connectionString = _connectionString;
         }
 
         public bool CreateUser(string _username, string _email, string _password)
         {
-            BasicDB basicDB = new(connectionString);
             string query = "INSERT INTO user (username, email, role, password) VALUES (@username, @email, 'User', @password)";
 
             using (MySqlConnection connection = new(connectionString))

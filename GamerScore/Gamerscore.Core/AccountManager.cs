@@ -1,27 +1,33 @@
-﻿using Gamerscore.Core.Enums;
+﻿using Gamerscore.DTO.Enums;
 using Gamerscore.Core.Interfaces;
-using Gamerscore.Core.Models;
+using Gamerscore.DTO;
 using Microsoft.AspNetCore.Identity;
 
 namespace Gamerscore.Core
 {
     public class AccountManager
     {
-        public bool CreateAccount(IAccountDB _accountDB, string _username, string _email, string _password)
+        private IAccountRepository accountRepository;
+        public AccountManager(IAccountRepository _accountRepository)
+        {
+            accountRepository = _accountRepository;
+        }
+
+        public bool CreateAccount(string _username, string _email, string _password)
         {
             User user = new(_username, _email);
             PasswordHasher<User> passwordHasher = new();
             string hashedPassword = passwordHasher.HashPassword(user, _password);
 
-            _accountDB.CreateUser(_username, _email, hashedPassword);
+            accountRepository.CreateUser(_username, _email, hashedPassword);
 
             return true;
         }
 
         //Takes the email and password to check if the user is allowde to login, if the log in is succesful we pass the accountId and role to use for a Jwt token later
-        public (bool result, int accountId, UserRole role) checkLogin(IAccountDB _accountDB, string _email, string _password)
+        public (bool result, int accountId, UserRole role) CheckLogin(string _email, string _password)
         {
-            string passwordHash = _accountDB.GetPasswordHash(_email);
+            string passwordHash = accountRepository.GetPasswordHash(_email);
 
             if (passwordHash == "Password not found")
             {
@@ -35,7 +41,7 @@ namespace Gamerscore.Core
                
                 if(result == PasswordVerificationResult.Success)
                 {
-                    User userInfo = _accountDB.GetAccountInfo(_email);
+                    User userInfo = accountRepository.GetAccountInfo(_email);
                     if (userInfo.Id == null)
                     {
                         return (false, -1, UserRole.None);

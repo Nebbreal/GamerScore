@@ -1,8 +1,5 @@
 using GamerScore.Models;
-using GamerScore.Options;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Configuration;
 using System.Diagnostics;
 
 namespace GamerScore.Controllers

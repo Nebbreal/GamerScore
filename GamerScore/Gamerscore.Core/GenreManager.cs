@@ -1,27 +1,33 @@
 ﻿using Gamerscore.Core.Interfaces;
-using Gamerscore.Core.Models;
+using Gamerscore.DTO;
 
 namespace Gamerscore.Core
 {
     public class GenreManager
     {
-        public List<Genre> GetAllGenres(IGenreDB _genreDB)
+        IGenreRepository genreRepository;
+        public GenreManager(IGenreRepository _genreRepository) 
         {
-            List<Genre> genres = _genreDB.GetAllGenres();
+            genreRepository = _genreRepository;
+        }
+
+        public List<Genre> GetAllGenres()
+        {
+            List<Genre> genres = genreRepository.GetAllGenres();
 
             return genres;
         }
 
-        public bool CreateGenre(IGenreDB _genreDB, string _name, string? _imageUrl) 
+        public bool CreateGenre(string _name, string? _imageUrl) 
         {
-            Genre genreInDatabase = _genreDB.GetGenreByName(_name);
+            Genre genreInDatabase = genreRepository.GetGenreByName(_name);
             if(_name == genreInDatabase.Name)
             {
                 return false;
             }
             else
             {
-                return _genreDB.CreateGenre(_name, _imageUrl);
+                return genreRepository.CreateGenre(_name, _imageUrl);
             }
 
         }

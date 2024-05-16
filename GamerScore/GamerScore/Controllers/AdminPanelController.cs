@@ -1,12 +1,11 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Models;
+using Gamerscore.DTO;
 using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace GamerScore.Controllers
 {
@@ -44,20 +43,21 @@ namespace GamerScore.Controllers
 
         public IActionResult AddGame()
         {
-            GenreManager genreManager = new();
-            GenreDB genreDB = new(_connectionStrings.DBConnectionString);
-            List<Genre> genres = genreManager.GetAllGenres(genreDB);
+            GenreRepository genreRepository = new(_connectionStrings.DBConnectionString);
+            GenreManager genreManager = new(genreRepository);
+
+            List<Genre> genres = genreManager.GetAllGenres();
             
             AddGameViewModel model = new(genres);
             return View(model);
         }
         [HttpPost]
-        public IActionResult AddGame(AddGameViewModel _model)
+        public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
         {
-            GameDB gameDB = new(_connectionStrings.DBConnectionString);
-            GameManager gameManager = new GameManager();
+            GameRepository gameRespository = new(_connectionStrings.DBConnectionString);
+            GameManager gameManager = new GameManager(gameRespository);
 
-            gameManager.CreateGame(gameDB, _model.Name, _model.Description, _model.Developer, _model.ThumbnailImageUrl, _model.ImageUrl, _model.SelectedGenres);
+            gameManager.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
             return RedirectToAction("Panel");
         }
 
@@ -65,19 +65,20 @@ namespace GamerScore.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult AddGenre(AddGenreViewModel _model) 
+        public IActionResult AddGenre(AddGenreViewModel _addGenreViewModel) 
         { 
-            if(_model.Name == null)
+            if(_addGenreViewModel.Name == null)
             {
-                _model.ErrorMessage = "A name is required";
-                return View(_model);
+                _addGenreViewModel.ErrorMessage = "A name is required";
+                return View(_addGenreViewModel);
             }
 
-            GenreDB genreDB = new(_connectionStrings.DBConnectionString);
-            GenreManager genreManager = new GenreManager();
+            GenreRepository genreRepository = new(_connectionStrings.DBConnectionString);
+            GenreManager genreManager = new GenreManager(genreRepository);
 
-            if(genreManager.CreateGenre(genreDB, _model.Name, _model.ImageUrl))
+            if(genreManager.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))
             {
                 AddGenreViewModel successModel = new AddGenreViewModel();
                 successModel.SuccessMessage = "Genre creation success!";
@@ -85,8 +86,8 @@ namespace GamerScore.Controllers
             }
             else 
             {
-                _model.ErrorMessage = "Name already exists or something went wrong";
-                return View(_model);
+                _addGenreViewModel.ErrorMessage = "Name already exists or something went wrong";
+                return View(_addGenreViewModel);
             }
         }
     }

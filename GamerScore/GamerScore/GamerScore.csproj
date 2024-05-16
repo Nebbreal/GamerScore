@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gamerscore.Core\Gamerscore.Core.csproj" />
     <ProjectReference Include="..\GamerScore.DAL\GamerScore.DAL.csproj" />
+    <ProjectReference Include="..\GamerScore.DTO\GamerScore.DTO.csproj" />
   </ItemGroup>
 
 </Project>

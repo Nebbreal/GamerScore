@@ -1,4 +1,4 @@
-﻿using Gamerscore.Core.Enums;
+﻿using Gamerscore.DTO.Enums;
 using GamerScore.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

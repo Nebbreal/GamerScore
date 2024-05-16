@@ -1,4 +1,4 @@
-﻿namespace Gamerscore.Core.Models
+﻿namespace Gamerscore.DTO
 {
     public class Genre
     {

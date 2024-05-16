@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GamerScore.DTO\GamerScore.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

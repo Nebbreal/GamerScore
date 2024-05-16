@@ -1,5 +1,5 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Enums;
+using Gamerscore.DTO.Enums;
 using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
@@ -24,32 +24,32 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel _model)
+        public IActionResult Login(LoginViewModel _LoginViewModel)
         {
             //Model validation
-            if(_model.Email.Length < 1 || _model.Password.Length < 1)
+            if(_LoginViewModel.Email.Length < 1 || _LoginViewModel.Password.Length < 1)
             {
                 string error = "Email or password is missing";
-                _model.ErrorMessage = error;
-                return View(_model);
+                _LoginViewModel.ErrorMessage = error;
+                return View(_LoginViewModel);
             }
             else
             {
-                AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-                AccountManager loginManager = new();
+                AccountRepository accountRepository = new(_connectionStrings.DBConnectionString);
+                AccountManager loginManager = new(accountRepository);
 
                 bool loginResult;
                 int accountId;
                 UserRole role;
 
-                (loginResult, accountId, role) = loginManager.checkLogin(accountDB, _model.Email, _model.Password);
+                (loginResult, accountId, role) = loginManager.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
                 if (loginResult)
                 {
                     //Create jwt token
                     int expirationTime = 10;
 
                     TokenService tokenService = new(_jwtSettings);
-                    var token = tokenService.CreateJwt(_model.Email, accountId, role, expirationTime);
+                    var token = tokenService.CreateJwt(_LoginViewModel.Email, accountId, role, expirationTime);
 
                     Response.Cookies.Append("jwtToken", token, new CookieOptions
                     {
@@ -62,8 +62,8 @@ namespace GamerScore.Controllers
                 else
                 {   
                     string error = "Email or password is incorrect";
-                    _model.ErrorMessage = error;
-                    return View(_model);
+                    _LoginViewModel.ErrorMessage = error;
+                    return View(_LoginViewModel);
                 }
             }
         }
@@ -79,11 +79,11 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(SignUpViewModel _model)
+        public IActionResult SignUp(SignUpViewModel _SignUpViewModel)
         {
-            AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-            AccountManager loginManager = new();
-            if(loginManager.CreateAccount(accountDB, _model.Username, _model.Email, _model.Password))//ToDo: is there a better way to do this?
+            AccountRepository accountRepository = new(_connectionStrings.DBConnectionString);
+            AccountManager loginManager = new(accountRepository);
+            if(loginManager.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
             {
                 return RedirectToAction("Login");
             }

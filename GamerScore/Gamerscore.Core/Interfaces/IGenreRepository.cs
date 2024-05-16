@@ -1,13 +1,8 @@
-﻿using Gamerscore.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Gamerscore.DTO;
 
 namespace Gamerscore.Core.Interfaces
 {
-    public interface IGenreDB
+    public interface IGenreRepository
     {
         public bool CreateGenre(string _name, string? _imageUrl);
         public Genre GetGenreByName(string _name);

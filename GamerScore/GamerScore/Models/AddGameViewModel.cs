@@ -1,4 +1,4 @@
-﻿using Gamerscore.Core.Models;
+﻿using Gamerscore.DTO;
 
 namespace GamerScore.Models
 {

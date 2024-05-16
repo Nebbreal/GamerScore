@@ -18,7 +18,6 @@ namespace Gamerscore.Core
         public bool CreateGame(string _title, string _description, string _developer, string _thumbnailImageUrl, List<string> _imageUrls, List<string> _genreIds)
         {
             List<int>parsedGenreIds = _genreIds.Select(int.Parse).ToList();
-
             return gameRepository.CreateGame(_title, _description, _developer, _thumbnailImageUrl, _imageUrls, parsedGenreIds);
         }
     }

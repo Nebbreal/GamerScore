@@ -90,7 +90,7 @@ namespace GamerScore.DAL
             }
         }
 
-        public bool CreateGenre(string _name, string? _imageUrl)//ToDo: turn this into a more general function/edit ExecuteNonQuery?
+        public bool CreateGenre(string _name, string? _imageUrl)
         {
             string query = "INSERT INTO genre (name, imageUrl) VALUES (@name, @imageUrl);";
             if (_imageUrl == null)

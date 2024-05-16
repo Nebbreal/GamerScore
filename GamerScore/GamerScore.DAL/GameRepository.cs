@@ -73,7 +73,7 @@ namespace GamerScore.DAL
                     MessageLogger.Log("Genres linked");
 
                     //Image linking
-                    if (_imageUrls.Count > 0)
+                    if (_imageUrls != null && _imageUrls.Count > 0)
                     {
                         values = string.Empty;
                         string lastImageUrl = _imageUrls.Last();

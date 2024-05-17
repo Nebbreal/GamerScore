@@ -1,15 +1,43 @@
-﻿.search-input{
-    width: 20em;
-    text-align: start;
-    background-image: url('../icons/search.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    text-indent: 20px;
-}
-
-.logo-first-color {
+﻿.logo-first-color {
     color: #7970CA;
 }
+
 .logo-second-color {
     color: #107D4B;
+}
+
+.search-input {
+    width: 20em;
+    text-align: start;
+    background: url('../icons/search.svg') no-repeat;
+    background-position-x: left;
+    background-position-y: center;
+    background-size: 10%;
+    background-color: white;
+
+    text-indent: 1.125rem;
+}
+
+.dropdown-container {
+    width: 4.425rem;
+    height: 3.375rem;
+}
+
+.dropdown-arrow {
+    transform: rotate(90deg);
+    margin-left: -1rem;
+}
+
+.dropdown-item-size{
+    height: 2rem;
+    margin-bottom: 0.2rem;
+}
+
+.dropdown-icon{
+    height: 2.1rem;
+}
+
+.dropdown-text
+{
+    margin: 0;
 }

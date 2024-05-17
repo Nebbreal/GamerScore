@@ -1,4 +1,5 @@
-﻿
+﻿@model LoginViewModel
+
 @{
     ViewData["Title"] = "Login";
 }
@@ -10,13 +11,20 @@
 <div class="d-flex flex-column">
     <h1 class="text-center">Login</h1>
     <form method="post" asp-controller="Login" asp-action="Login" class="d-flex flex-column mx-auto mt-5">
-        <label for="Email">Email</label>
-        <input for="Email" class="login" placeholder="Enter your email here..." />
-        <label for="Password">Password</label>
-        <input type="password" class="login" for="Password" placeholder="Enter your password here..." />
-
+        <label asp-for="Email">Email</label>
+        <input required asp-for="Email" class="login" placeholder="Enter your email here..." value="@(Model != null ? Model.Email : "")"/>
+        <label asp-for="Password">Password</label>
+        <input required asp-for="Password" type="password" class="login" placeholder="Enter your password here..." value="@(Model != null ? Model.Password : "")"/>
+        
+        @if(Model != null && Model.ErrorMessage != null)
+        {
+            <div class="error-box error-bg">
+                <p class="inter-bold mb-0">@Model.ErrorMessage</p>
+            </div>
+        }
+        
         <div class="d-flex mt-3 justify-content-center">
-            <button type="submit" class="secondary-bg btn login">Submit</button>
+            <button type="submit" class="secondary-bg btn login">Log in</button>
         </div>
         <div class="mx-auto">
             <p class="mt-2 mb-0">Don't have an account? <a class="complementary-txt" asp-controller="Login" asp-action="SignUp">Sign up here!</a></p>

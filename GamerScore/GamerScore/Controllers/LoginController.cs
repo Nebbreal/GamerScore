@@ -1,6 +1,9 @@
-﻿using GamerScore.DAL;
+﻿using Gamerscore.Core;
+using Gamerscore.DTO.Enums;
+using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
+using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -9,10 +12,11 @@ namespace GamerScore.Controllers
     public class LoginController : Controller
     {
         private readonly ConnectionStrings _connectionStrings;
-        
-        public LoginController(IOptions<ConnectionStrings> connectionStrings)
+        private readonly JwtSettings _jwtSettings;
+        public LoginController(IOptions<ConnectionStrings> connectionStrings, IOptions<JwtSettings> jwt)
         {
             this._connectionStrings = connectionStrings.Value;
+            this._jwtSettings = jwt.Value;
         }
         public IActionResult Login()
         {
@@ -20,9 +24,53 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string _email, string _password)
-        { 
-            return View(); 
+        public IActionResult Login(LoginViewModel _LoginViewModel)
+        {
+            //Model validation
+            if(_LoginViewModel.Email.Length < 1 || _LoginViewModel.Password.Length < 1)
+            {
+                string error = "Email or password is missing";
+                _LoginViewModel.ErrorMessage = error;
+                return View(_LoginViewModel);
+            }
+            else
+            {
+                AccountRepository accountRepository = new(_connectionStrings.DBConnectionString);
+                AccountManager loginManager = new(accountRepository);
+
+                bool loginResult;
+                int accountId;
+                UserRole role;
+
+                (loginResult, accountId, role) = loginManager.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
+                if (loginResult)
+                {
+                    //Create jwt token
+                    int expirationTime = 10;
+
+                    TokenService tokenService = new(_jwtSettings);
+                    var token = tokenService.CreateJwt(_LoginViewModel.Email, accountId, role, expirationTime);
+
+                    Response.Cookies.Append("jwtToken", token, new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddMinutes(expirationTime),
+                        HttpOnly = true //Cookie can only be found in an http request
+                    });
+
+                    return RedirectToAction("Home", "Home");
+                }
+                else
+                {   
+                    string error = "Email or password is incorrect";
+                    _LoginViewModel.ErrorMessage = error;
+                    return View(_LoginViewModel);
+                }
+            }
+        }
+        public IActionResult LogOut()
+        {
+            Response.Cookies.Delete("jwtToken");
+            return RedirectToAction("Home", "Home");
         }
 
         public IActionResult SignUp()
@@ -31,13 +79,19 @@ namespace GamerScore.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(SignUpViewModel model)
+        public IActionResult SignUp(SignUpViewModel _SignUpViewModel)
         {
-            AccountDB accountDB = new(_connectionStrings.DBConnectionString);
-            BasicDB basicDB = new(_connectionStrings.DBConnectionString);
-            basicDB.ConnectionTest();
-            accountDB.CreateUser(model.Username, model.Email, model.Password);
-            return RedirectToAction("Login");
+            AccountRepository accountRepository = new(_connectionStrings.DBConnectionString);
+            AccountManager loginManager = new(accountRepository);
+            if(loginManager.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+            
         }
 
         public IActionResult PasswordReset()
@@ -50,5 +104,6 @@ namespace GamerScore.Controllers
         {
             return View();
         }
+
     }
 }

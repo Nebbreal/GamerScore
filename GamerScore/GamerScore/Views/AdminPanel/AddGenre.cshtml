@@ -1,0 +1,43 @@
+﻿@model AddGenreViewModel
+
+@{
+    ViewData["Title"] = "Add genre page";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/addItem.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Add a genre</h1>
+
+@if (Model != null && Model.ErrorMessage != null)
+{
+    <div class="error-box error-bg">
+        <p class="inter-bold mb-0">@Model.ErrorMessage</p>
+    </div>
+}
+@if (Model != null && Model.SuccessMessage != null)
+{
+    <div class="error-box success-bg">
+        <p class="inter-bold mb-0">@Model.SuccessMessage</p>
+    </div>
+}
+
+<form method="post" asp-action="AddGenre" asp-controller="AdminPanel" class="mt-3">
+    <h2 class="header-txt inter-bold mb-1">Name</h2>
+    <input asp-for="Name" required placeholder="Enter the name of the genre here..." />
+
+    <h2 class="header-txt inter-bold mb-1">Image url</h2>
+    <input asp-for="ImageUrl" placeholder="Enter the image url of the genre here..." />
+
+    <div class="d-flex mt-2 flex-row align-items-center">
+        <button type="submit" class="action-button primary-bg d-flex justify-content-center align-items-center ">
+            <p class="mb-0">Save</p>
+        </button>
+
+        <a asp-action="Panel" asp-controller="AdminPanel" class="action-button primary-bg d-flex justify-content-center align-items-center ms-3">
+            <p class="mb-0">Cancel</p>
+        </a>
+    </div>
+
+</form>

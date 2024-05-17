@@ -1,7 +1,6 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
 using Gamerscore.DTO;
-using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using GamerScore.Services;
@@ -12,10 +11,12 @@ namespace GamerScore.Controllers
 {
     public class AdminPanelController : Controller
     {
+        private IGameRepository gameRepository;
         private IGenreRepository genreRepository;
         private readonly JwtSettings jwtSettings;
-        public AdminPanelController(IGenreRepository genreRepository, IOptions<JwtSettings> jwt)
+        public AdminPanelController(IGameRepository gameRepository, IGenreRepository genreRepository, IOptions<JwtSettings> jwt)
         {
+            this.gameRepository = gameRepository;
             this.genreRepository = genreRepository;
             this.jwtSettings = jwt.Value;
         }
@@ -54,7 +55,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
         {
-            GameManager gameManager = new GameManager(gameRespository);
+            GameManager gameManager = new GameManager(gameRepository);
 
             gameManager.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
             return RedirectToAction("Panel");

@@ -1,6 +1,7 @@
 using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
 using GamerScore.DAL;
+using GamerScore.DTO;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -18,9 +19,17 @@ namespace GamerScore.Controllers
         public IActionResult Home()
         {
             //Get games
-            //GameRepository gameRepository = new();
-            //GameManager gameManager = new()
-            return View();
+            List<Game> games = new List<Game>();
+            try
+            {
+                GameManager gameManager = new(gameRepository);
+                games = gameManager.GetAllGames();
+            }
+            catch (Exception ex)
+            {
+                //ToDo: throw exception
+            }
+            return View(new HomeViewModel(games));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

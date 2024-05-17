@@ -1,8 +1,19 @@
+using Gamerscore.Core.Interfaces;
+using GamerScore.DAL;
 using GamerScore.Options;
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var configuration = builder.Configuration;
+
+builder.Services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
+builder.Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+
+//Dependency Injection
+string connectionString = configuration.GetConnectionString("DBConnectionString");
+
+builder.Services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
+builder.Services.AddSingleton<IGameRepository>(new GameRepository(connectionString));
+builder.Services.AddSingleton<IGenreRepository>(new GenreRepository(connectionString));
 
 builder.Services.AddControllersWithViews();
 

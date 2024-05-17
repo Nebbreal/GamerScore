@@ -1,3 +1,6 @@
+using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
+using GamerScore.DAL;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -6,15 +9,17 @@ namespace GamerScore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IGameRepository gameRepository;
+        public HomeController(IGameRepository gameRepository)
         {
-            _logger = logger;
+            this.gameRepository = gameRepository;
         }
 
         public IActionResult Home()
         {
+            //Get games
+            //GameRepository gameRepository = new();
+            //GameManager gameManager = new()
             return View();
         }
 

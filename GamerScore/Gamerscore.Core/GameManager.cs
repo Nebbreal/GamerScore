@@ -1,4 +1,5 @@
 ﻿using Gamerscore.Core.Interfaces;
+using GamerScore.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Gamerscore.Core
 {
     public class GameManager
     {
-        IGameRepository gameRepository;
+        private IGameRepository gameRepository;
         public GameManager(IGameRepository _gameRepository) 
         {
             gameRepository = _gameRepository;
@@ -19,6 +20,12 @@ namespace Gamerscore.Core
         {
             List<int>parsedGenreIds = _genreIds.Select(int.Parse).ToList();
             return gameRepository.CreateGame(_title, _description, _developer, _thumbnailImageUrl, _imageUrls, parsedGenreIds);
+        }
+
+        public List<Game> GetAllGames()
+        {
+            List<Game> games = gameRepository.GetAllGames();
+            return games;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
+using Gamerscore.DTO;
+using GamerScore.DTO;
 using MySqlConnector;
 
 namespace GamerScore.DAL
@@ -48,7 +50,7 @@ namespace GamerScore.DAL
                         MessageLogger.Log("GameId read");
                     }
                     
-                    //Link the game to the genres
+                    //Link the game to the games
                     //Concatinate the values string
 
                     string values = string.Empty;
@@ -113,6 +115,47 @@ namespace GamerScore.DAL
                     MessageLogger.Log("Connection closed");
                 }
                 return false;
+            }
+        }
+
+        public List<Game> GetAllGames()
+        {
+            string query = "SELECT id, title, description, developer, thumbnailImageUrl FROM game ORDER BY id DESC";
+            List<Game> games = new List<Game>();
+
+            using (MySqlConnection connection = new(connectionString))
+            {
+                try
+                {
+                    using MySqlCommand command = new MySqlCommand(query, connection);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    MySqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int gameId = int.Parse(reader["id"].ToString());
+                        string? gameTitle = reader["title"].ToString() ?? null;
+                        string? gameDescription = reader["description"].ToString() ?? null;
+                        string? gameDeveloper = reader["developer"].ToString() ?? null;
+                        string? gameThumbnailImageUrl = reader["thumbnailImageUrl"].ToString() ?? null;
+                        Game game = new(gameId, gameTitle, gameDescription, gameDeveloper, gameThumbnailImageUrl);
+
+                        games.Add(game);
+                    }
+                    return games;
+                }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+                return games;
             }
         }
     }

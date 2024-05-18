@@ -4,7 +4,7 @@ namespace GamerScore.Controllers
 {
     public class GameController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Game()
         {
             return View();
         }

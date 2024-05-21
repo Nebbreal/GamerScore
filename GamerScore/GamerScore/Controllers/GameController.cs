@@ -1,12 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
+using GamerScore.DTO;
+using GamerScore.Models;
+using GamerScore.Options;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace GamerScore.Controllers
 {
     public class GameController : Controller
     {
-        public IActionResult Game()
+        private IGameRepository gameRepository;
+        public GameController(IGameRepository gameRepository)
         {
-            return View();
+            this.gameRepository = gameRepository;
+        }
+
+        public IActionResult Game(int gameId)
+        {
+            GameManager gameManager = new GameManager(gameRepository);
+            GameViewModel game = new(gameManager.GetGameById(gameId));
+            
+            return View(game);
         }
     }
 }

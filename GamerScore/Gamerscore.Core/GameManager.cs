@@ -1,10 +1,5 @@
 ﻿using Gamerscore.Core.Interfaces;
 using GamerScore.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gamerscore.Core
 {
@@ -26,6 +21,22 @@ namespace Gamerscore.Core
         {
             List<Game> games = gameRepository.GetAllGames();
             return games;
+        }
+
+        //ToDo: finish this
+        public Game GetGameById(int id)
+        {
+            try
+            {
+                Game game = gameRepository.GetGameById(id);
+                return game;
+            }
+            catch (Exception e)
+            {
+                MessageLogger.Log($"Exception occured: {e}");
+                Game game = new(id, "Failed fetching game", "Failed fetching game", "Failed fetching game", "Failed fetching game");
+                return game;
+            }
         }
     }
 }

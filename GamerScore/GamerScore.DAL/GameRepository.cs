@@ -2,7 +2,9 @@
 using Gamerscore.Core.Interfaces;
 using Gamerscore.DTO;
 using GamerScore.DTO;
+using GamerScore.Exceptions;
 using MySqlConnector;
+using System.Data;
 
 namespace GamerScore.DAL
 {
@@ -98,7 +100,7 @@ namespace GamerScore.DAL
                         command.Transaction = transaction;
                         command.ExecuteNonQuery();
 
-                        MessageLogger.Log("Images linked");
+                        MessageLogger.Log("ImageUrls linked");
                     }
 
                     transaction.Commit();
@@ -107,7 +109,7 @@ namespace GamerScore.DAL
                 catch (Exception e)
                 {
                     transaction.Rollback();
-                    MessageLogger.Log($"Exception caught trying to execute query fore CreateGame Exception:" + e.ToString());
+                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery fore CreateGame Exception:" + e.ToString());
                 }
                 finally
                 {
@@ -148,7 +150,7 @@ namespace GamerScore.DAL
                 }
                 catch (Exception e)
                 {
-                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery: {query} Exception:" + e.ToString());
                 }
                 finally
                 {
@@ -157,6 +159,88 @@ namespace GamerScore.DAL
                 }
                 return games;
             }
+        }
+
+        public Game GetGameById(int _gameId)
+        {
+            int gameId = -1;
+            string gameTitle = string.Empty;
+            string gameDescription = string.Empty;
+            string gameDeveloper = string.Empty;
+            string gameThumbnailImageUrl = string.Empty;
+
+            if (_gameId < 0)
+            {
+                throw new DataFetchFailedException("Id is negative");
+            }
+
+            using (MySqlConnection connection = new(connectionString))
+            {
+                //Get data from the "game" table
+                string gameInfoQuery = "SELECT id, title, description, developer, thumbnailImageUrl FROM  game WHERE id = @gameId";
+                
+                Game game;
+                try
+                {
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    MySqlCommand command = new MySqlCommand(gameInfoQuery, connection);
+
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            gameId = reader.GetInt32("id");
+                            gameTitle = reader.GetString("title");
+                            gameDescription = reader.GetString("description");
+                            gameDeveloper = reader.GetString("developer");
+                            gameThumbnailImageUrl = reader.GetString("thumbnailImageUrl");
+                            
+                        }
+                        MessageLogger.Log("Game table read");
+                    }
+
+                    string imagesQuery = "SELECT name, imageUrl FROM game_image WHERE id = @gameId;";
+                    command = new MySqlCommand(imagesQuery, connection);
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+
+                    List<GameImage> images = new List<GameImage>();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string gameImageName = reader.GetString("name");
+                            string gameImageUrl = reader.GetString("imageUrl");
+
+                            images.Add(new GameImage(gameImageName, gameImageUrl));
+                        }
+                    }
+                    if (images.Count > 0)
+                    {
+                        game = new Game(gameId, gameTitle, gameDescription, gameDeveloper, gameThumbnailImageUrl, images);
+                    }
+                    else
+                    {
+                        game = new Game(gameId, gameTitle, gameDescription, gameDeveloper, gameThumbnailImageUrl);
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    throw new DataFetchFailedException("GetGameById failed" , e);
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+
+                return game;
+            }
+            
         }
     }
 }

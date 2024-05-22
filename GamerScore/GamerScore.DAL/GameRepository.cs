@@ -203,7 +203,7 @@ namespace GamerScore.DAL
                         MessageLogger.Log("Game table read");
                     }
 
-                    string imagesQuery = "SELECT name, imageUrl FROM game_image WHERE id = @gameId;";
+                    string imagesQuery = "SELECT name, imageUrl FROM game_image WHERE game_id = @gameId;";
                     command = new MySqlCommand(imagesQuery, connection);
                     command.Parameters.AddWithValue("@gameId", _gameId);
 

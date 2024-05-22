@@ -19,7 +19,7 @@ namespace GamerScore.Controllers
         public IActionResult Game(int gameId)
         {
             GameManager gameManager = new GameManager(gameRepository);
-            GameViewModel game = new(gameManager.GetGameById(gameId));
+            GameViewModel game = new(gameManager.GetGameById(gameId)); //ToDo: this fetches only the first image
             
             return View(game);
         }

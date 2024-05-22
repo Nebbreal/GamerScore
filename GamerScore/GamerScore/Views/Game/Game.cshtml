@@ -1,6 +1,6 @@
-﻿@model GameViewModel
+﻿@using GamerScore.DTO
+@model GameViewModel
 @{
-    //ToDo change this to be dynamic
     ViewData["Title"] = Model.game.Title +  " - Game page";
 }
 
@@ -11,21 +11,41 @@
 <div class="d-flex flex-row">
     <div id="gameImageCarousel" class="carousel slide" data-bs-interval="false">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            @if (Model.game.ImageUrls != null && Model.game.ImageUrls.Count() > 0)
+            {
+                int i = 0;
+                foreach (GameImage image in Model.game.ImageUrls)
+                {
+                    <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="true" aria-label="@image.Name"></button>
+                    i++;
+                }
+            }
+            else
+            {
+                <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            }
+            
         </div>
 
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="~/images/image-unkown.png" class="game-image" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/pfp.png" class="game-image" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/vertical-unknown.png" class="game-image" alt="...">
-            </div>
+            @if (Model.game.ImageUrls != null && Model.game.ImageUrls.Count() > 0)
+            {
+                int i = 0;
+                foreach (GameImage image in Model.game.ImageUrls)
+                {
+                    <div class="@(i == 0 ? "carousel-item active" : "carousel-item")">
+                        <img src="@image.ImageUrl" class="game-image" alt="@image.Name">
+                    </div>
+                    i++;
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <img src="~/images/image-unkown.png" class="game-image" alt="Image not found">
+                </div>
+            }
+            
         </div>
 
         <button class="carousel-control-prev" type="button" data-bs-target="#gameImageCarousel" data-bs-slide="prev">

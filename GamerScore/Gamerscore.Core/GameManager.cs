@@ -23,7 +23,6 @@ namespace Gamerscore.Core
             return games;
         }
 
-        //ToDo: finish this
         public Game GetGameById(int id)
         {
             try

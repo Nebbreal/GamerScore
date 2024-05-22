@@ -46,14 +46,14 @@ namespace GamerScore.Controllers
                 if (loginResult)
                 {
                     //Create jwt token
-                    int expirationTime = 10;
+                    int expirationTime = 12;
 
                     TokenService tokenService = new(jwtSettings);
                     var token = tokenService.CreateJwt(_LoginViewModel.Email, accountId, role, expirationTime);
 
                     Response.Cookies.Append("jwtToken", token, new CookieOptions
                     {
-                        Expires = DateTime.UtcNow.AddMinutes(expirationTime),
+                        Expires = DateTime.UtcNow.AddHours(expirationTime),
                         HttpOnly = true //Cookie can only be found in an http request
                     });
 

@@ -28,7 +28,7 @@ namespace GamerScore.Services
                     new Claim("AccountId", _accountId.ToString()),
                     new Claim("Role", _role.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_expirationTime),
+                Expires = DateTime.UtcNow.AddHours(_expirationTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };

@@ -5,11 +5,13 @@ namespace GamerScore.Models
 {
     public class GameViewModel
     {
-        public Game game {  get; private set; }
+        public Game Game {  get; set; }
+        public Review Review { get; set; }
 
+        public GameViewModel() { }
         public GameViewModel(Game _game) 
         {
-            game = _game;
+            Game = _game;
         }
     }
 }

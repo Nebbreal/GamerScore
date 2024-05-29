@@ -1,10 +1,8 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
-using Gamerscore.DTO;
 using GamerScore.DTO;
 using GamerScore.Exceptions;
 using MySqlConnector;
-using System.Data;
 
 namespace GamerScore.DAL
 {
@@ -54,7 +52,6 @@ namespace GamerScore.DAL
                     
                     //Link the game to the games
                     //Concatinate the values string
-
                     string values = string.Empty;
                     int lastGenreId = _genreIds.Last();
                     foreach (int genreId in _genreIds)

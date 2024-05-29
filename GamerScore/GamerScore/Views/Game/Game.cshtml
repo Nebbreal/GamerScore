@@ -1,7 +1,7 @@
 ﻿@using GamerScore.DTO
 @model GameViewModel
 @{
-    ViewData["Title"] = Model.game.Title +  " - Game page";
+    ViewData["Title"] = Model.Game.Title +  " - Game page";
 }
 
 @section Styles{
@@ -9,28 +9,29 @@
 }
 
 <div id="fade-bg" class="fade-bg">
-    <div id="review-container" class="create-review-container secondary-bg p-2">
-        <button onclick="closeReview()" class="create-review-cross bg-transparent border-0">
+    <form method="post" asp-action="PostReview" asp-controller="Game" id="review-container" class="create-review-container secondary-bg p-2">
+        <button type="button" onclick="closeReview()" class="create-review-cross bg-transparent border-0">
             <img src="~/icons/cross.svg" />
         </button>
 
         <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100 mb-1">
-            <h1>@Model.game.Title</h1>
+            <input asp-for="Review.GameId" type="text" hidden value="@Model.Game.Id" />
+            <h1>@Model.Game.Title</h1>
 
             <h2>Your rating</h2>
-            <input hidden value="1" />
+            <input asp-for="Review.StarRating" id="rating" type="text" hidden />
             <div class="d-flex flex-row">
                 <ul class="create-review-star-row">
                     @for (int starId = 0; starId < 10; starId += 2)
                     {
                         <li>
-                            <button id="star@(starId)" class="create-review-button bg-transparent">
+                            <button type="button" onclick="changeRating(@starId)" id="star@(starId)" class="create-review-button bg-transparent">
                                 <img class="create-review-star" src="~/icons/star-favorite-half-empty.svg" />
                             </button>
                         </li>
 
                         <li>
-                            <button id="star@(starId+1)" class="create-review-button bg-transparent">
+                            <button type="button" onclick="changeRating(@(starId+1))" id="star@(starId+1)" class="create-review-button bg-transparent">
                                 <img class="create-review-star create-review-star-end mirror" src="~/icons/star-favorite-half-empty.svg" />
                             </button>
                         </li>
@@ -39,22 +40,22 @@
             </div>
 
             <h2>Your review</h2>
-            <textarea class="create-review-review" placeholder="Write your review here..."></textarea>
+            <textarea asp-for="Review.UserContext" class="create-review-review" placeholder="Write your review here..."></textarea>
         </div>
 
         <div class="d-flex justify-content-center align-items-center">
-            <button class="create-review-submit primary-bg">Submit</button>
+            <button type="submit" class="create-review-submit primary-bg">Submit</button>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="d-flex flex-row">
     <div id="gameImageCarousel" class="carousel slide" data-bs-interval="false">
         <div class="carousel-indicators">
-            @if (Model.game.ImageUrls != null && Model.game.ImageUrls.Count() > 0)
+            @if (Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
             {
                 int i = 0;
-                foreach (GameImage image in Model.game.ImageUrls)
+                foreach (GameImage image in Model.Game.ImageUrls)
                 {
                     <button type="button" data-bs-target="#gameImageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="true" aria-label="@image.Name"></button>
                     i++;
@@ -68,10 +69,10 @@
         </div>
 
         <div class="carousel-inner">
-            @if (Model.game.ImageUrls != null && Model.game.ImageUrls.Count() > 0)
+            @if (Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
             {
                 int i = 0;
-                foreach (GameImage image in Model.game.ImageUrls)
+                foreach (GameImage image in Model.Game.ImageUrls)
                 {
                     <div class="@(i == 0 ? "carousel-item active" : "carousel-item")">
                         <img src="@image.ImageUrl" class="game-image" alt="@image.Name">
@@ -99,8 +100,8 @@
     </div>
     
     <div class="ms-4">
-        <h1 class="game-title title-txt inter-bold" title="@Model.game.Title">@Model.game.Title</h1>
-        <p class="mt-3">@Model.game.Description</p>
+        <h1 class="game-title title-txt inter-bold" title="@Model.Game.Title">@Model.Game.Title</h1>
+        <p class="mt-3">@Model.Game.Description</p>
     </div>
     <div class="ms-2">
         <div class="yellow mb-1"></div>

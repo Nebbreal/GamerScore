@@ -20,8 +20,16 @@ namespace GamerScore.Controllers
         {
             GameManager gameManager = new GameManager(gameRepository);
             GameViewModel game = new(gameManager.GetGameById(gameId)); //ToDo: this fetches only the first image
-            
+            game.Review = new Review();
             return View(game);
+        }
+
+        [HttpPost]
+        public IActionResult PostReview(GameViewModel gameViewModel)
+        {
+            //return RedirectToAction("Game", new RouteValueDictionary(
+            //    new { action = "Game", gameId = gameViewModel.Game.Id }));
+            return RedirectToAction("Home", "Home");
         }
     }
 }

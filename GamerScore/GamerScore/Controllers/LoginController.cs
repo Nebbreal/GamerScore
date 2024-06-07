@@ -12,11 +12,13 @@ namespace GamerScore.Controllers
 {
     public class LoginController : Controller
     {
-        private IAccountRepository accountRepository;
+        //private IAccountRepository accountRepository;
+        private AccountManager accountManager;
         private readonly JwtSettings jwtSettings;
-        public LoginController(IAccountRepository accountRepository, IOptions<JwtSettings> jwt)
+        //public LoginController(IAccountRepository accountRepository, IOptions<JwtSettings> jwt)
+        public LoginController(AccountManager accountManager, IOptions<JwtSettings> jwt)
         {
-            this.accountRepository = accountRepository;
+            this.accountManager = accountManager;
             this.jwtSettings = jwt.Value;
         }
         public IActionResult Login()
@@ -36,13 +38,13 @@ namespace GamerScore.Controllers
             }
             else
             {
-                AccountManager loginManager = new(accountRepository);
+               // AccountManager loginManager = new(accountRepository);
 
                 bool loginResult;
                 int accountId;
                 UserRole role;
 
-                (loginResult, accountId, role) = loginManager.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
+                (loginResult, accountId, role) = accountManager.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
                 if (loginResult)
                 {
                     //Create jwt token
@@ -81,8 +83,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult SignUp(SignUpViewModel _SignUpViewModel)
         {
-            AccountManager loginManager = new(accountRepository);
-            if(loginManager.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
+            if(accountManager.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
             {
                 return RedirectToAction("Login");
             }

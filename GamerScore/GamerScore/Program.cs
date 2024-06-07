@@ -1,3 +1,4 @@
+using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
 using GamerScore.DAL;
 using GamerScore.Options;
@@ -14,6 +15,9 @@ string connectionString = configuration.GetConnectionString("DBConnectionString"
 builder.Services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
 builder.Services.AddSingleton<IGameRepository>(new GameRepository(connectionString));
 builder.Services.AddSingleton<IGenreRepository>(new GenreRepository(connectionString));
+builder.Services.AddSingleton<AccountManager>(sp => { 
+    return new AccountManager(sp.GetRequiredService<IAccountRepository>()); 
+});
 
 builder.Services.AddControllersWithViews();
 

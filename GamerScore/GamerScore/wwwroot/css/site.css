@@ -80,6 +80,17 @@ body {
     background-color: #53F376;
 }
 
+.fade-bg {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
 .primary-txt {
     color: #4BBC88;
 }
@@ -105,6 +116,10 @@ body {
 
 .flip-horizontal{
     transform: rotate(180deg);
+}
+
+.mirror {
+    transform: scaleX(-1);
 }
 
 .error-box {

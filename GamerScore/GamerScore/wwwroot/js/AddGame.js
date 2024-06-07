@@ -1,6 +1,8 @@
 ﻿//Genre selector via select2
 $(document).ready(function () {
-    $('#genre').select2();
+    $('#genre').select2({
+        sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
+    });
 });
 
 //Adding and removing images

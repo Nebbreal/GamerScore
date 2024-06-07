@@ -1,6 +1,6 @@
 ﻿using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
 using Gamerscore.DTO;
-using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using GamerScore.Services;
@@ -11,12 +11,14 @@ namespace GamerScore.Controllers
 {
     public class AdminPanelController : Controller
     {
-        private readonly ConnectionStrings _connectionStrings;
-        private readonly JwtSettings _jwtSettings;
-        public AdminPanelController(IOptions<ConnectionStrings> connectionStrings, IOptions<JwtSettings> jwt)
+        private IGameRepository gameRepository;
+        private IGenreRepository genreRepository;
+        private readonly JwtSettings jwtSettings;
+        public AdminPanelController(IGameRepository gameRepository, IGenreRepository genreRepository, IOptions<JwtSettings> jwt)
         {
-            this._connectionStrings = connectionStrings.Value;
-            this._jwtSettings = jwt.Value;
+            this.gameRepository = gameRepository;
+            this.genreRepository = genreRepository;
+            this.jwtSettings = jwt.Value;
         }
 
         public IActionResult Panel()
@@ -26,7 +28,7 @@ namespace GamerScore.Controllers
             var jwtToken = Request.Cookies["jwtToken"];
             if (jwtToken != null)
             {
-                TokenService tokenService = new(_jwtSettings);
+                TokenService tokenService = new(jwtSettings);
                 isAdmin = tokenService.ValidateAdminLevelJwt(jwtToken);
             }
             
@@ -43,7 +45,6 @@ namespace GamerScore.Controllers
 
         public IActionResult AddGame()
         {
-            GenreRepository genreRepository = new(_connectionStrings.DBConnectionString);
             GenreManager genreManager = new(genreRepository);
 
             List<Genre> genres = genreManager.GetAllGenres();
@@ -54,8 +55,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
         {
-            GameRepository gameRespository = new(_connectionStrings.DBConnectionString);
-            GameManager gameManager = new GameManager(gameRespository);
+            GameManager gameManager = new GameManager(gameRepository);
 
             gameManager.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
             return RedirectToAction("Panel");
@@ -75,7 +75,6 @@ namespace GamerScore.Controllers
                 return View(_addGenreViewModel);
             }
 
-            GenreRepository genreRepository = new(_connectionStrings.DBConnectionString);
             GenreManager genreManager = new GenreManager(genreRepository);
 
             if(genreManager.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))

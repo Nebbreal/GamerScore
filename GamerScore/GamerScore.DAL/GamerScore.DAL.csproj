@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gamerscore.Core\Gamerscore.Core.csproj" />
+    <ProjectReference Include="..\GamerScore.Exceptions\GamerScore.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

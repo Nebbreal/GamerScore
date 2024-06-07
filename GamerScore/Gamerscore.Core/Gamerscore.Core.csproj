@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GamerScore.DTO\GamerScore.DTO.csproj" />
+    <ProjectReference Include="..\GamerScore.Exceptions\GamerScore.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

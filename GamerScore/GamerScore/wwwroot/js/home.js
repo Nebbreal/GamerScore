@@ -1,6 +1,6 @@
 ﻿let scrollAmount = remToPx(78)
-function ScrollLeft() {
-    let itemlist = document.getElementById("newlyAddedItemList");
+function ScrollLeft(itemListId) {
+    let itemlist = document.getElementById(itemListId);
     let scrollPosition = itemlist.scrollLeft;
     itemlist.scroll({
         left: scrollPosition - scrollAmount,
@@ -8,8 +8,8 @@ function ScrollLeft() {
     });
 }
 
-function ScrollRight() {
-    let itemlist = document.getElementById("newlyAddedItemList");
+function ScrollRight(itemListId) {
+    let itemlist = document.getElementById(itemListId);
     let scrollPosition = itemlist.scrollLeft;
     itemlist.scroll({
         left: scrollPosition + scrollAmount,

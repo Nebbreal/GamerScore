@@ -1,4 +1,6 @@
-﻿@{
+﻿@using GamerScore.DTO
+@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -12,54 +14,42 @@
 <div class="d-flex flex-row align-items-center">
     <h2 class="inter-regular">Newly added</h2>
     <div class="ms-auto">
-        <button class="bg-transparent border-0" onclick="ScrollLeft()">
+        <button class="bg-transparent border-0" onclick="ScrollLeft('newlyAddedItemList')">
             <img class="flip-horizontal scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
         </button>
-        <button class="bg-transparent border-0" onclick="ScrollRight()">
+        <button class="bg-transparent border-0" onclick="ScrollRight('newlyAddedItemList')">
             <img class="scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
         </button>
     </div>
-            
 </div>
 
 <div id="newlyAddedItemList" class="itemlist-container">
-    <div class="item-container">
-        <div class="item-container-top"></div>
-        <div class="d-flex align-items-center flex-column item-container-bottom">
-            <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-            <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
-        </div>
-    </div>
-
-    @for (int i = 0; i<20; i++)
+    @foreach(Game game in Model.games)
     {
-        <div class="item-container">
+        <a class="item-container text-decoration-none" asp-action="Game" asp-controller="Game" asp-route-gameId="@game.Id">
             <div class="item-container-top"></div>
             <div class="d-flex align-items-center flex-column item-container-bottom">
-                <img class="item-image" src="~/images/vertical-unknown.png" alt="image not found" />
-                <p class="inter-regular item-text">testTitle: test of the wild wild wildwild</p>
+                <img class="item-image" src="@(!string.IsNullOrEmpty(game.ThumbnailImageUrl) ? game.ThumbnailImageUrl : "/images/vertical-unknown.png")" alt="image not found" />
+                <p class="inter-regular item-text">@game.Title</p>
             </div>
-        </div>
+        </a>
     }
-    
-
-
 </div>
 
 <div class="d-flex flex-row align-items-center">
     <h2 class="inter-regular">Highly rated</h2>
     <div class="ms-auto">
-        <button class="bg-transparent border-0" onclick="">
+        <button class="bg-transparent border-0" onclick="ScrollLeft('highlyRatedItemList')">
             <img class="flip-horizontal scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
         </button>
-        <button class="bg-transparent border-0" onclick="">
+        <button class="bg-transparent border-0" onclick="ScrollRight('highlyRatedItemList')">
             <img class="scroll-arrow" src="~/icons/right-arrow.svg" alt="right-arrow" />
         </button>
     </div>
 
 </div>
 
-<div id="newlyAddedItemList" class="itemlist-container">
+<div id="highlyRatedItemList" class="itemlist-container">
     <div class="item-container">
         <div class="item-container-top"></div>
         <div class="d-flex align-items-center flex-column item-container-bottom">
@@ -85,5 +75,5 @@
 
 @section Scripts{
     <script src="~/js/Converter.js" asp-append-version="true"></script>
-    <script src="~/js/home.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="~/js/Home.js" type="text/javascript" asp-append-version="true"></script>
 }

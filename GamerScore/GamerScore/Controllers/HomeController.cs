@@ -1,3 +1,7 @@
+using Gamerscore.Core;
+using Gamerscore.Core.Interfaces;
+using GamerScore.DAL;
+using GamerScore.DTO;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -6,16 +10,26 @@ namespace GamerScore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IGameRepository gameRepository;
+        public HomeController(IGameRepository gameRepository)
         {
-            _logger = logger;
+            this.gameRepository = gameRepository;
         }
 
         public IActionResult Home()
         {
-            return View();
+            //Get games
+            List<Game> games = new List<Game>();
+            try
+            {
+                GameManager gameManager = new(gameRepository);
+                games = gameManager.GetAllGames();
+            }
+            catch (Exception ex)
+            {
+                //ToDo: throw exception
+            }
+            return View(new HomeViewModel(games));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

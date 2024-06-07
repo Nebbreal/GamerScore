@@ -1,0 +1,125 @@
+﻿.game-image {
+    width: 40.4375rem;
+    height: 24rem;
+}
+
+.game-title {
+    height: 7.25rem;
+
+    /*Overflow handling*/
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yellow {
+    background-color: yellow;
+    height: 3rem;
+    width: 3rem;
+}
+
+.review-container {
+    width: 38.375rem;
+    height: 14.375rem;
+    background-color: #A1B3DC;
+}
+
+.review-gap {
+    margin-right: 2.1rem !important;
+}
+
+.reviews-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-row-gap: 19px;
+}
+
+.profile-picture {
+    width: 4rem;
+    height: 3.8125rem;
+    margin-left: 1rem;
+}
+
+.username-txt {
+    color: black;
+    font-size: 1.6rem;
+}
+
+.review-stars {
+    width: 10rem;
+    height: 2.3rem;
+    background-color: green;
+}
+
+.review-txt {
+    font-size: 1.5rem;
+    width: 32.3125rem;
+}
+
+.create-review-container {
+    display: none;
+    flex-direction: column;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    opacity: 1;
+    width: 51.6rem;
+    height: 34.9rem;
+
+    z-index: 4;
+}
+
+.create-review-cross {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.create-review-cross img{
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.create-review-star {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+    pointer-events: none;
+}
+
+.create-review-star-end {
+    left: -0.1rem;
+}
+
+.create-review-star-row {
+    gap: 0;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+}
+
+.create-review-button {
+    display: flex;
+    justify-content: center;
+    width: 2rem;
+    border: none;
+}
+
+.create-review-review {
+    width: 80%;
+    height: 80%;
+    resize: none;
+}
+
+.create-review-submit {
+    width: 21.959rem;
+    height: 3.77738rem;
+    border: none;
+}

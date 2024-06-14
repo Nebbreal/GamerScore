@@ -1,5 +1,5 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+using Gamerscore.Core.Interfaces.Repositories;
 using GamerScore.DTO;
 using GamerScore.Exceptions;
 using MySqlConnector;
@@ -106,7 +106,7 @@ namespace GamerScore.DAL
                 catch (Exception e)
                 {
                     transaction.Rollback();
-                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery fore CreateGame Exception:" + e.ToString());
+                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery for CreateGame Exception:" + e.ToString());
                 }
                 finally
                 {

@@ -1,6 +1,4 @@
-using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
-using GamerScore.DAL;
+using Gamerscore.Core.Interfaces.Services;
 using GamerScore.DTO;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +8,10 @@ namespace GamerScore.Controllers
 {
     public class HomeController : Controller
     {
-        private IGameRepository gameRepository;
-        public HomeController(IGameRepository gameRepository)
+        private IGameService gameService;
+        public HomeController(IGameService _gameService)
         {
-            this.gameRepository = gameRepository;
+            gameService = _gameService;
         }
 
         public IActionResult Home()
@@ -22,8 +20,7 @@ namespace GamerScore.Controllers
             List<Game> games = new List<Game>();
             try
             {
-                GameManager gameManager = new(gameRepository);
-                games = gameManager.GetAllGames();
+                games = gameService.GetAllGames();
             }
             catch (Exception ex)
             {
@@ -33,7 +30,7 @@ namespace GamerScore.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error() //ToDo: make error view
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

@@ -1,19 +1,20 @@
-﻿using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core.Interfaces.Repositories;
+using Gamerscore.Core.Interfaces.Services;
 using GamerScore.DTO;
 
 namespace Gamerscore.Core
 {
-    public class GameManager
+    public class GameService : IGameService
     {
         private IGameRepository gameRepository;
-        public GameManager(IGameRepository _gameRepository) 
+        public GameService(IGameRepository _gameRepository)
         {
             gameRepository = _gameRepository;
         }
 
         public bool CreateGame(string _title, string _description, string _developer, string _thumbnailImageUrl, List<string> _imageUrls, List<string> _genreIds)
         {
-            List<int>parsedGenreIds = _genreIds.Select(int.Parse).ToList();
+            List<int> parsedGenreIds = _genreIds.Select(int.Parse).ToList();
             return gameRepository.CreateGame(_title, _description, _developer, _thumbnailImageUrl, _imageUrls, parsedGenreIds);
         }
 

@@ -1,5 +1,6 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
+using Gamerscore.Core.Interfaces.Services;
 using GamerScore.DTO;
 using GamerScore.Models;
 using GamerScore.Options;
@@ -10,16 +11,15 @@ namespace GamerScore.Controllers
 {
     public class GameController : Controller
     {
-        private IGameRepository gameRepository;
-        public GameController(IGameRepository gameRepository)
+        private IGameService gameService;
+        public GameController(IGameService _gameService)
         {
-            this.gameRepository = gameRepository;
+            gameService = _gameService;
         }
 
         public IActionResult Game(int gameId)
         {
-            GameManager gameManager = new GameManager(gameRepository);
-            GameViewModel game = new(gameManager.GetGameById(gameId)); //ToDo: this fetches only the first image
+            GameViewModel game = new(gameService.GetGameById(gameId));
             game.Review = new Review();
             return View(game);
         }

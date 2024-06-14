@@ -4,16 +4,18 @@ using System.Security.Claims;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Gamerscore.Core.Interfaces.Services;
+using Microsoft.Extensions.Options;
 
 namespace GamerScore.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IJwtSettings _jwtSettings;
 
-        public TokenService(IJwtSettings jwtSettings)
+        public TokenService(IOptions<IJwtSettings> jwtSettings)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public string CreateJwt(string _email, int _accountId, UserRole _role, int _expirationTime)

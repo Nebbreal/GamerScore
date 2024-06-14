@@ -1,7 +1,5 @@
-﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core.Interfaces.Services;
 using Gamerscore.DTO.Enums;
-using GamerScore.DAL;
 using GamerScore.Models;
 using GamerScore.Options;
 using GamerScore.Services;
@@ -12,14 +10,14 @@ namespace GamerScore.Controllers
 {
     public class LoginController : Controller
     {
-        //private IAccountRepository accountRepository;
-        private AccountManager accountManager;
-        private readonly JwtSettings jwtSettings;
-        //public LoginController(IAccountRepository accountRepository, IOptions<JwtSettings> jwt)
-        public LoginController(AccountManager accountManager, IOptions<JwtSettings> jwt)
+        private IAccountService accountService;
+        private ITokenService tokenService;
+
+        public LoginController(IAccountService _accountService, ITokenService _tokenService)
         {
-            this.accountManager = accountManager;
-            this.jwtSettings = jwt.Value;
+            accountService = _accountService;
+            tokenService = _tokenService;
+
         }
         public IActionResult Login()
         {
@@ -38,19 +36,18 @@ namespace GamerScore.Controllers
             }
             else
             {
-               // AccountManager loginManager = new(accountRepository);
+               // AccountService loginManager = new(accountRepository);
 
                 bool loginResult;
                 int accountId;
                 UserRole role;
 
-                (loginResult, accountId, role) = accountManager.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
+                (loginResult, accountId, role) = accountService.CheckLogin(_LoginViewModel.Email, _LoginViewModel.Password);
                 if (loginResult)
                 {
                     //Create jwt token
                     int expirationTime = 12;
 
-                    TokenService tokenService = new(jwtSettings);
                     var token = tokenService.CreateJwt(_LoginViewModel.Email, accountId, role, expirationTime);
 
                     Response.Cookies.Append("jwtToken", token, new CookieOptions
@@ -83,7 +80,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult SignUp(SignUpViewModel _SignUpViewModel)
         {
-            if(accountManager.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
+            if(accountService.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
             {
                 return RedirectToAction("Login");
             }

@@ -1,5 +1,5 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+using Gamerscore.Core.Interfaces.Repositories;
 using Gamerscore.DTO;
 using MySqlConnector;
 

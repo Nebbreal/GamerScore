@@ -1,24 +1,20 @@
-﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core.Interfaces.Services;
 using Gamerscore.DTO;
 using GamerScore.Models;
-using GamerScore.Options;
-using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace GamerScore.Controllers
 {
     public class AdminPanelController : Controller
     {
-        private IGameRepository gameRepository;
-        private IGenreRepository genreRepository;
-        private readonly JwtSettings jwtSettings;
-        public AdminPanelController(IGameRepository gameRepository, IGenreRepository genreRepository, IOptions<JwtSettings> jwt)
+        private IGameService gameService;
+        private IGenreService genreService;
+        private ITokenService tokenService;
+        public AdminPanelController(IGameService _gameService, IGenreService _genreService, ITokenService _tokenService)
         {
-            this.gameRepository = gameRepository;
-            this.genreRepository = genreRepository;
-            this.jwtSettings = jwt.Value;
+            gameService = _gameService;
+            genreService = _genreService;
+            tokenService = _tokenService;
         }
 
         public IActionResult Panel()
@@ -28,7 +24,6 @@ namespace GamerScore.Controllers
             var jwtToken = Request.Cookies["jwtToken"];
             if (jwtToken != null)
             {
-                TokenService tokenService = new(jwtSettings);
                 isAdmin = tokenService.ValidateAdminLevelJwt(jwtToken);
             }
             
@@ -45,9 +40,7 @@ namespace GamerScore.Controllers
 
         public IActionResult AddGame()
         {
-            GenreManager genreManager = new(genreRepository);
-
-            List<Genre> genres = genreManager.GetAllGenres();
+            List<Genre> genres = genreService.GetAllGenres();
             
             AddGameViewModel model = new(genres);
             return View(model);
@@ -55,9 +48,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
         {
-            GameManager gameManager = new GameManager(gameRepository);
-
-            gameManager.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
+            gameService.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
             return RedirectToAction("Panel");
         }
 
@@ -75,9 +66,7 @@ namespace GamerScore.Controllers
                 return View(_addGenreViewModel);
             }
 
-            GenreManager genreManager = new GenreManager(genreRepository);
-
-            if(genreManager.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))
+            if(genreService.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))
             {
                 AddGenreViewModel successModel = new AddGenreViewModel();
                 successModel.SuccessMessage = "Genre creation success!";

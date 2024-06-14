@@ -1,7 +1,12 @@
 using Gamerscore.Core;
 using Gamerscore.Core.Interfaces;
+using Gamerscore.Core.Interfaces.Repositories;
+using Gamerscore.Core.Interfaces.Services;
 using GamerScore.DAL;
 using GamerScore.Options;
+using GamerScore.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
@@ -15,9 +20,18 @@ string connectionString = configuration.GetConnectionString("DBConnectionString"
 builder.Services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
 builder.Services.AddSingleton<IGameRepository>(new GameRepository(connectionString));
 builder.Services.AddSingleton<IGenreRepository>(new GenreRepository(connectionString));
-builder.Services.AddSingleton<AccountManager>(sp => { 
-    return new AccountManager(sp.GetRequiredService<IAccountRepository>()); 
+builder.Services.AddSingleton<IAccountService>(sp => {
+    return new AccountService(sp.GetRequiredService<IAccountRepository>()); 
 });
+builder.Services.AddSingleton<IGameService>(sp => {
+    return new GameService(sp.GetRequiredService<IGameRepository>());
+});
+builder.Services.AddSingleton<IGenreService>(sp =>
+{
+    return new GenreService(sp.GetRequiredService<IGenreRepository>());
+});
+builder.Services.AddSingleton<ITokenService>(sp => new TokenService(sp.GetRequiredService<IOptions<JwtSettings>>()));
+
 
 builder.Services.AddControllersWithViews();
 

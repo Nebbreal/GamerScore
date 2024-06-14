@@ -1,6 +1,6 @@
 ﻿using GamerScore.DTO;
 
-namespace Gamerscore.Core.Interfaces
+namespace Gamerscore.Core.Interfaces.Repositories
 {
     public interface IGameRepository
     {

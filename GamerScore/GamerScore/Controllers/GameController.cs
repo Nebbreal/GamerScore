@@ -1,4 +1,5 @@
 ﻿using Gamerscore.Core.Interfaces.Services;
+using GamerScore.Attributes;
 using GamerScore.DTO;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace GamerScore.Controllers
             return View(game);
         }
 
-        [HttpPost]
+        [HttpPost, LoginRequired]
         public IActionResult PostReview(GameViewModel gameViewModel)
         {
             //Model validation

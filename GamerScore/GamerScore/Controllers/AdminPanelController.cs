@@ -1,10 +1,12 @@
 ﻿using Gamerscore.Core.Interfaces.Services;
 using Gamerscore.DTO;
+using GamerScore.Attributes;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamerScore.Controllers
 {
+    [AdminRequired]
     public class AdminPanelController : Controller
     {
         private IGameService gameService;
@@ -19,23 +21,7 @@ namespace GamerScore.Controllers
 
         public IActionResult Panel()
         {
-            //Validate if an admin is logged in
-            bool isAdmin = false;
-            var jwtToken = Request.Cookies["jwtToken"];
-            if (jwtToken != null)
-            {
-                isAdmin = tokenService.ValidateAdminLevelJwt(jwtToken);
-            }
-            
-            if(isAdmin == true)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Home", "Home");
-            }
-            
+            return View();
         }
 
         public IActionResult AddGame()

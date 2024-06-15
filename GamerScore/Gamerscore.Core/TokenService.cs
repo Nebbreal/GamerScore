@@ -83,9 +83,19 @@ namespace GamerScore.Services
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var role = jwtToken.Claims.First(x => x.Type == "Role").Value;
+                var roleClaim = jwtToken.Claims.First(x => x.Type == "Role");
 
-                // Check if the role is Admin
+                string role;
+                if (roleClaim != null)
+                {
+                    role = roleClaim.Value;
+                }
+                else
+                {
+                    role = "error";
+                }
+
+                // Check if the roleClaim is Admin
                 if (role == UserRole.Admin.ToString())
                 {
                     return true;

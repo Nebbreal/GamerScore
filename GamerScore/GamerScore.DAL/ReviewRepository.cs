@@ -1,12 +1,8 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces.Repositories;
+using GamerScore.DTO;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GamerScore.DAL
 {
@@ -18,20 +14,33 @@ namespace GamerScore.DAL
             this.connectionString = _connectionString;
         }
 
-        public bool CreateReview(int userId, int gameId, string userContext, int starRating)
+        public bool CreateReview(Review _review)
         {
             using(MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    string query = "INSERT INTO review (user_id, game_id, userContext, starRating) VALUES (@userId, @gameId, @userContext, @starRating);";
+
+                    string query = string.Empty;
+                    if (String.IsNullOrWhiteSpace(_review.UserContext))
+                    {
+                        query = "INSERT INTO review (user_id, game_id, starRating) VALUES (@userId, @gameId, @starRating);";
+
+                    }
+                    else
+                    {
+                        query = "INSERT INTO review (user_id, game_id, userContext, starRating) VALUES (@userId, @gameId, @userContext, @starRating);";
+                    }
                     MySqlCommand command = new MySqlCommand(query, connection);
 
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@gameId", gameId);
-                    command.Parameters.AddWithValue("@userContext", userContext);
-                    command.Parameters.AddWithValue("@starRating", starRating);
+                    command.Parameters.AddWithValue("@userId", _review.UserId);
+                    command.Parameters.AddWithValue("@gameId", _review.GameId);
+                    if (!String.IsNullOrWhiteSpace(_review.UserContext))
+                    {
+                        command.Parameters.AddWithValue("@userContext", _review.UserContext);
+                    }
+                    command.Parameters.AddWithValue("@starRating", _review.StarRating);
 
                     command.ExecuteNonQuery();
 

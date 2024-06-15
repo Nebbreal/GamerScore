@@ -36,8 +36,6 @@ namespace GamerScore.Controllers
             }
             else
             {
-               // AccountService loginManager = new(accountRepository);
-
                 bool loginResult;
                 int accountId;
                 UserRole role;

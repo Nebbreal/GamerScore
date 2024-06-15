@@ -5,6 +5,7 @@ using Gamerscore.Core.Interfaces.Services;
 using GamerScore.DAL;
 using GamerScore.Options;
 using GamerScore.Services;
+using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
@@ -20,16 +21,12 @@ string connectionString = configuration.GetConnectionString("DBConnectionString"
 builder.Services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
 builder.Services.AddSingleton<IGameRepository>(new GameRepository(connectionString));
 builder.Services.AddSingleton<IGenreRepository>(new GenreRepository(connectionString));
-builder.Services.AddSingleton<IAccountService>(sp => {
-    return new AccountService(sp.GetRequiredService<IAccountRepository>()); 
-});
-builder.Services.AddSingleton<IGameService>(sp => {
-    return new GameService(sp.GetRequiredService<IGameRepository>());
-});
-builder.Services.AddSingleton<IGenreService>(sp =>
-{
-    return new GenreService(sp.GetRequiredService<IGenreRepository>());
-});
+builder.Services.AddSingleton<IReviewRepository>(new ReviewRepository(connectionString));
+
+builder.Services.AddSingleton<IAccountService>(sp => new AccountService(sp.GetRequiredService<IAccountRepository>()));
+builder.Services.AddSingleton<IGameService>(sp => new GameService(sp.GetRequiredService<IGameRepository>()));
+builder.Services.AddSingleton<IGenreService>(sp => new GenreService(sp.GetRequiredService<IGenreRepository>()));
+builder.Services.AddSingleton<IReviewService>(sp => new ReviewService(sp.GetRequiredService<IReviewRepository>()));
 builder.Services.AddSingleton<ITokenService>(sp => new TokenService(sp.GetRequiredService<IOptions<JwtSettings>>()));
 
 

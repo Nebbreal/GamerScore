@@ -7,6 +7,7 @@ namespace GamerScore.Models
     {
         public Game Game {  get; set; }
         public Review Review { get; set; }
+        public List<Review> AllReviews { get; set; }
         public string? ErrorMessage {  get; set; }
         public string? SuccessMessage { get; set; }
 

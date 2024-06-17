@@ -117,11 +117,6 @@
         <h1 class="game-title title-txt inter-bold" title="@Model.Game.Title">@Model.Game.Title</h1>
         <p class="mt-3">@Model.Game.Description</p>
     </div>
-    <div class="ms-2">
-        <div class="yellow mb-1"></div>
-        <div class="yellow mb-1"></div>
-        <div class="yellow mb-1"></div>
-    </div>
 </div>
 
 <div class="d-flex flex-row mb-1">
@@ -209,26 +204,74 @@
 
 <p class="header-txt inter-bold mb-2">Reviews</p>
 <div class="reviews-container">
-    @if (Model == null || Model.Review == null)
+    @if (Model == null || Model.AllReviews.Count == 0)
     {
         <p>There are no reviews available for this game</p>
     }
     else
     {
-       <div class="review-container">
-           <div class="d-flex flex-row mt-3">
-               <img class="profile-picture" src="~/images/pfp.png" />
-               <div class="ms-2">
-                   <p class="username-txt inter-bold mb-0">Insert username here</p>
-                   <p class="mb-0">Last edited: xx-xx-xxxx</p>
-               </div>
-               <div class="d-flex align-items-center">
-                   <div class="review-stars ms-2"></div>
-                   <p class="inter-bold mb-0 ms-1">3.5/5</p>
-               </div>
-           </div>    
-           <p class="review-txt inter-light ms-4">Review text</p>
-       </div> 
+        @foreach (Review userReview in Model.AllReviews)
+        {
+            <div class="review-container">
+                <div class="d-flex flex-row mt-3 justify-content-between">
+                    <div class="d-flex flex-row">
+                        <img class="profile-picture" src="~/images/pfp.png" />
+                        <div class="ms-2">
+                            <p class="username-txt inter-bold mb-0" title="@userReview.Username">@userReview.Username</p>
+                            <p class="mb-0">Last edited: @userReview.createdAt.Date.ToString("dd-MM-yyyy")</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center align-self-auto">
+                        @{
+                            float starRating = userReview.StarRating;
+                            float UIStarRating = starRating / 2;
+                        }
+
+                        <div class="review-stars">
+                            <ul class="create-review-star-row star-row-small">
+                                @for (int str = 0; str < starRating; str++)
+                                {
+                                    if (str % 2 == 0)
+                                    {
+                                        <li class="review-star-img">
+                                            <img class="review-star-small" src="~/icons/star-favorite-half.svg" />
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="review-star-img">
+                                            <img class="review-star-small create-review-star-end mirror" src="~/icons/star-favorite-half.svg" />
+                                        </li>
+                                    }
+                                }
+                                @for (float str = starRating++; str <= 9; str++)
+                                {
+                                    if (str % 2 == 0)
+                                    {
+                                        <li class="review-star-img">
+                                            <img class="review-star-small" src="~/icons/star-favorite-half-empty.svg" />
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="review-star-img">
+                                            <img class="review-star-small create-review-star-end mirror" src="~/icons/star-favorite-half-empty.svg" />
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+
+                        <p class="inter-bold mb-0 ms-1 me-1">@UIStarRating.ToString()/5</p>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row">
+                    <p class="review-txt inter-light ms-4">@userReview.UserContext</p>
+                </div>
+            </div>
+        }
     }
     
 </div>

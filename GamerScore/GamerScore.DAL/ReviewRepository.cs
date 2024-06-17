@@ -113,6 +113,61 @@ namespace GamerScore.DAL
             }
         }
 
+        public List<Review> GetAllReviewsByGameIdOrDefault(int _gameId)
+        {
+            List<Review> reviews = new List<Review>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT review.id, review.user_id, u.username, review.game_id, review.userContext, review.starRating, review.createdAt FROM review INNER JOIN user u ON review.user_id = u.id WHERE review.game_id = @gameId";
+
+                    MySqlCommand command = new MySqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        if (!reader.IsDBNull(0))
+                        {
+                            Review review = new Review();
+
+                            review.Id = reader.GetInt32("Id");
+                            review.UserId = reader.GetInt32("user_id");
+                            review.Username = reader.GetString("username");
+                            review.GameId = reader.GetInt32("game_id");
+                            review.UserContext = reader.GetString("userContext");
+                            review.StarRating = reader.GetFloat("starRating");
+                            review.createdAt = reader.GetDateTime("createdAt");
+
+                            reviews.Add(review);
+                        }
+                        else
+                        {
+                            throw new DataFetchFailedException();
+                        }
+
+                    }
+
+                    return reviews;
+                }
+                catch (Exception ex)
+                {
+                    MessageLogger.Log($"Exception trying to execute CreateGame, Exception: " + ex.Message);
+
+                    return reviews;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+        }
+
         public bool DeleteReviewByGameIdAndUserId(int _gameId, int _userId)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))

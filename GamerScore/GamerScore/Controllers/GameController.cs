@@ -26,7 +26,8 @@ namespace GamerScore.Controllers
             GameViewModel gameViewModel = new GameViewModel()
             {
                 Game = gameService.GetGameById(gameId),
-                Review = reviewService.GetReviewByGameAndUserIdOrDefault(gameId, userId)
+                Review = reviewService.GetReviewByGameAndUserIdOrDefault(gameId, userId),
+                AllReviews = reviewService.GetAllReviewsByGameId(gameId)
             };
             
             return View("Game", gameViewModel);

@@ -16,5 +16,16 @@ namespace Gamerscore.Core
         {
             return reviewRepository.CreateReview(_review);
         }
+
+        public Review GetReviewByGameAndUserIdOrDefault(int _gameId, int _userId)
+        {
+            if (_userId < 1)
+            {
+                return new Review();
+            }
+
+            return reviewRepository.GetReviewByGameAndUserIdOrDefault(_gameId, _userId);
+        }
+
     }
 }

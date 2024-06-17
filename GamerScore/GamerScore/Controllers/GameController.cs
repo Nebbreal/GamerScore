@@ -3,6 +3,7 @@ using GamerScore.Attributes;
 using GamerScore.DTO;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace GamerScore.Controllers
@@ -18,19 +19,17 @@ namespace GamerScore.Controllers
             reviewService = _reviewService;
         }
 
-        public IActionResult Game(int gameId, GameViewModel? gameViewModel)
+        public IActionResult Game(int gameId)
         {
-            if (gameViewModel != null && gameViewModel.Game != null)
-            {
-                return View(gameViewModel);
-            }
-            GameViewModel game = new()
+            int userId = GetUserIdFromJwtOrDefault();
+
+            GameViewModel gameViewModel = new GameViewModel()
             {
                 Game = gameService.GetGameById(gameId),
-                Review = new Review()
+                Review = reviewService.GetReviewByGameAndUserIdOrDefault(gameId, userId)
             };
-
-            return View(game);
+            
+            return View("Game", gameViewModel);
         }
 
         [HttpPost, LoginRequired]
@@ -39,25 +38,37 @@ namespace GamerScore.Controllers
             //Model validation
             Review review = gameViewModel.Review;
             if (review.StarRating < 1) { review.StarRating = 1; }
+            
             //Get accountId
-            var jwtToken = Request.Cookies["jwtToken"];
-            var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(jwtToken);
+            int userId = GetUserIdFromJwtOrDefault();
 
-            int userId;
-            if (int.TryParse(jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "AccountId").Value, out userId))
-            {
-                review.UserId = userId;
-            }
-            else
+            if (userId < -1)
             {
                 gameViewModel.ErrorMessage = "Error creating review";
-                return RedirectToAction("Game", new { gameId = review.GameId, gameViewModel = gameViewModel });
+                return RedirectToAction("Game", new { gameViewModel = review.GameId });
             }
+
+            review.UserId = userId;
 
             reviewService.CreateReview(review);
             gameViewModel.SuccessMessage = "Review successfully created!";
-            return RedirectToAction("Game", new { gameId = review.GameId, gameViewModel = gameViewModel });
+
+            return RedirectToAction("Game", new { gameId = review.GameId });
+        }
+
+        private int GetUserIdFromJwtOrDefault()
+        {
+            var jwtToken = Request.Cookies["jwtToken"];
+            var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken? jwtSecurityToken = handler.CanReadToken(jwtToken) ? handler.ReadJwtToken(jwtToken) : null;
+
+            int userId = -1;
+            if (jwtSecurityToken != null)
+            {
+                userId = int.Parse(jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "AccountId").Value); //ToDo: betere manier hiervoor?
+            }
+
+            return userId;
         }
     }
 }

@@ -15,7 +15,6 @@
         </button>
 
         <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100 mb-1">
-            <input hidden asp-for="Game" value="@Model.Game" />
             <input hidden asp-for="Review.GameId" type="text" value="@Model.Game.Id" />
             <h1>@Model.Game.Title</h1>
 
@@ -67,7 +66,7 @@
 <div class="d-flex flex-row">
     <div id="gameImageCarousel" class="carousel slide" data-bs-interval="false">
         <div class="carousel-indicators">
-            @if (Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
+            @if (Model != null && Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
             {
                 int i = 0;
                 foreach (GameImage image in Model.Game.ImageUrls)
@@ -84,7 +83,7 @@
         </div>
 
         <div class="carousel-inner">
-            @if (Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
+            @if (Model != null && Model.Game.ImageUrls != null && Model.Game.ImageUrls.Count() > 0)
             {
                 int i = 0;
                 foreach (GameImage image in Model.Game.ImageUrls)
@@ -133,27 +132,55 @@
     <div>
         <p class="header-txt inter-bold mb-2">Your review</p>
         <div class="review-container d-flex justify-content-center align-items-center">
-            <p class="w-auto">You haven't made a review yet <button onclick="showCreateReview()" class="complementary-txt border-0 bg-transparent text-decoration-underline">click here to start a review</button></p>
+            @if (Model != null && Model.Review.Id != null)
+            {
+                <div class="review-container">
+                    <div class="d-flex flex-row mt-3">
+                        <img class="profile-picture" src="~/images/pfp.png" />
+                        <div class="ms-2">
+                            <p class="username-txt inter-bold mb-0" title="@Model.Review.UserName">@Model.Review.UserName</p>
+                            <p class="mb-0">@Model.Review.createdAt.ToString()</p>
+                        </div>
+                        <div class="d-flex align-items-center align-self-auto">
+                            <div class="review-stars ms-2"></div>
+                            <p class="inter-bold mb-0 ms-1">@(Model.Review.StarRating)/2</p>
+                        </div>
+                    </div>
+                    <p class="review-txt inter-light ms-4">@Model.Review.UserContext</p>
+                </div>
+            }
+            else
+            {
+                <p class="w-auto mb-0">You haven't made a review yet <button onclick="showCreateReview()" class="complementary-txt border-0 bg-transparent text-decoration-underline">click here to start a review</button></p>
+            }
         </div>
     </div>
 </div>
 
 <p class="header-txt inter-bold mb-2">Reviews</p>
 <div class="reviews-container">
-    <div class="review-container">
-        <div class="d-flex flex-row mt-3">
-            <img class="profile-picture" src="~/images/pfp.png" />
-            <div class="ms-2">
-                <p class="username-txt inter-bold mb-0">Insert username here</p>
-                <p class="mb-0">Last edited: xx-xx-xxxx</p>
-            </div>
-            <div class="d-flex align-items-center">
-                <div class="review-stars ms-2"></div>
-                <p class="inter-bold mb-0 ms-1">3.5/5</p>
-            </div>
-        </div>    
-        <p class="review-txt inter-light ms-4">Review text</p>
-    </div>
+    @if (Model == null || Model.Review == null)
+    {
+        <p>There are no reviews available for this game</p>
+    }
+    else
+    {
+       <div class="review-container">
+           <div class="d-flex flex-row mt-3">
+               <img class="profile-picture" src="~/images/pfp.png" />
+               <div class="ms-2">
+                   <p class="username-txt inter-bold mb-0">Insert username here</p>
+                   <p class="mb-0">Last edited: xx-xx-xxxx</p>
+               </div>
+               <div class="d-flex align-items-center">
+                   <div class="review-stars ms-2"></div>
+                   <p class="inter-bold mb-0 ms-1">3.5/5</p>
+               </div>
+           </div>    
+           <p class="review-txt inter-light ms-4">Review text</p>
+       </div> 
+    }
+    
 </div>
 
 @section Scripts{

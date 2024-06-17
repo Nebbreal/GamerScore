@@ -122,8 +122,53 @@
 <div class="d-flex flex-row mb-1">
     <div class="review-gap">
         <p class="header-txt inter-bold mb-2">Rating</p>
-        <div id="user-review" class="review-container"></div>
+        <div id="user-review" class="review-container">
+            <div class="d-flex flex-row align-items-center justify-content-between h-100 w-100">
+                @{
+                    float ratingSum = Model.AllReviews.Sum(review => review.StarRating) / Model.AllReviews.Count();
+                    float ratingSumUI = ratingSum / 2;
+                }
+
+            
+                <div class="rating-stars">
+                    <ul class="create-review-star-row star-row-big">
+                        @for (int str = 0; str < ratingSum; str++)
+                        {
+                            if (str % 2 == 0)
+                            {
+                                <li class="rating-star-img">
+                                    <img class="rating-star-big" src="~/icons/star-favorite-half.svg" />
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="rating-star-img">
+                                    <img class="rating-star-big create-review-star-end mirror" src="~/icons/star-favorite-half.svg" />
+                                </li>
+                            }
+                        }
+                        @for (float str = ratingSum++; str <= 9; str++)
+                        {
+                            if (str % 2 == 0)
+                            {
+                                <li class="rating-star-img">
+                                    <img class="rating-star-big" src="~/icons/star-favorite-half-empty.svg" />
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="rating-star-img">
+                                    <img class="rating-star-big create-review-star-end mirror" src="~/icons/star-favorite-half-empty.svg" />
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <p class="inter-bold rating-txt mb-0">@ratingSumUI/5 stars</p>
+            </div>
+        </div>
     </div>
+
     <div>
         <p class="header-txt inter-bold mb-2">Your review</p>
         <div class="review-container d-flex justify-content-center align-items-center">

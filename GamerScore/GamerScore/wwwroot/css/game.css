@@ -25,6 +25,33 @@
     width: 3rem;
 }
 
+.rating-stars {
+    width: 20rem;
+    height: 4rem;
+    margin-right: 4rem;
+}
+
+.star-row-big {
+    height: 2.3rem;
+}
+
+.rating-txt {
+    font-size: 2.8rem;
+    margin-right: 2rem;
+}
+
+.rating-star-img {
+    width: 2.2rem;
+    height: 100%;
+}
+
+.rating-star-big {
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    pointer-events: none;
+}
+
 .review-container {
     width: 38.375rem;
     height: 14.375rem;

@@ -84,7 +84,7 @@ namespace GamerScore.DAL
                         {
                             review.Id = reader.GetInt32("Id");
                             review.UserId = reader.GetInt32("user_id");
-                            review.UserName = reader.GetString("username");
+                            review.Username = reader.GetString("username");
                             review.GameId = reader.GetInt32("game_id");
                             review.UserContext = reader.GetString("userContext");
                             review.StarRating = reader.GetFloat("starRating");
@@ -110,6 +110,38 @@ namespace GamerScore.DAL
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        public bool DeleteReviewByGameIdAndUserId(int _gameId, int _userId)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM review WHERE game_id = @gameId AND user_id = @userId;";
+
+                    MySqlCommand command = new MySqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+                    command.Parameters.AddWithValue("@userId", _userId);
+
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    MessageLogger.Log($"Exception trying to execute CreateGame, Exception: " + ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                
             }
         }
     }

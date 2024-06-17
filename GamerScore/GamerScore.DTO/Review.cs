@@ -10,7 +10,7 @@ namespace GamerScore.DTO
     {
         public int? Id { get; set; }
         public int UserId { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public int GameId { get; set; }
         public string? UserContext {  get; set; }
         public float StarRating { get; set; }

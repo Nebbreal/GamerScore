@@ -133,3 +133,7 @@ body {
 
     text-indent: 0.5rem;
 }
+
+.filter-red {
+    filter: invert(27%) sepia(79%) saturate(7484%) hue-rotate(355deg) brightness(104%) contrast(123%);
+}

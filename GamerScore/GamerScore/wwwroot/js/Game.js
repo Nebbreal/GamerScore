@@ -32,3 +32,19 @@ function changeRating(starId) {
     }
     console.log(ratingInput.value);
 }
+
+//Deletes the review with the associated review and game ID's, we are not using reviewId for safety reasons
+function deleteReview(gameId) {
+    if (confirm('Are you sure you want to remove your review?')) {
+        $.post({
+            url: "/Game/DeleteReview",
+            data: { gameId: gameId },
+            success: function (data) {
+                window.location.reload();
+            }
+        })
+    }
+    else {
+        return
+    }
+}

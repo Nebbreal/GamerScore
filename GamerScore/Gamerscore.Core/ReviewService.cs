@@ -27,5 +27,10 @@ namespace Gamerscore.Core
             return reviewRepository.GetReviewByGameAndUserIdOrDefault(_gameId, _userId);
         }
 
+        public bool DeleteReviewByGameIdAndUserId(int _gameId, int _userId)
+        {
+            return reviewRepository.DeleteReviewByGameIdAndUserId(_gameId, _userId);
+        }
+
     }
 }

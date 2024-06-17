@@ -42,10 +42,10 @@ namespace GamerScore.Controllers
             //Get accountId
             int userId = GetUserIdFromJwtOrDefault();
 
-            if (userId < -1)
+            if (userId < 1)
             {
-                gameViewModel.ErrorMessage = "Error creating review";
-                return RedirectToAction("Game", new { gameViewModel = review.GameId });
+                gameViewModel.ErrorMessage = "Error creating review"; //ToDo: implement this somehow
+                return RedirectToAction("Game", new { gameId = review.GameId });
             }
 
             review.UserId = userId;
@@ -54,6 +54,22 @@ namespace GamerScore.Controllers
             gameViewModel.SuccessMessage = "Review successfully created!";
 
             return RedirectToAction("Game", new { gameId = review.GameId });
+        }
+
+        [HttpPost, LoginRequired]
+        public IActionResult DeleteReview (int gameId)
+        {
+            int userId = GetUserIdFromJwtOrDefault();
+
+            if (userId < 1)
+            {
+                //gameViewModel.ErrorMessage = "Error removing review";
+                return RedirectToAction("Game", new { gameId = gameId });
+            }
+
+            reviewService.DeleteReviewByGameIdAndUserId(gameId, userId);
+
+            return RedirectToAction("Game", new { gameId = gameId });
         }
 
         private int GetUserIdFromJwtOrDefault()

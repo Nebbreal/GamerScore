@@ -135,18 +135,68 @@
             @if (Model != null && Model.Review.Id != null)
             {
                 <div class="review-container">
-                    <div class="d-flex flex-row mt-3">
-                        <img class="profile-picture" src="~/images/pfp.png" />
-                        <div class="ms-2">
-                            <p class="username-txt inter-bold mb-0" title="@Model.Review.UserName">@Model.Review.UserName</p>
-                            <p class="mb-0">@Model.Review.createdAt.ToString()</p>
+                    <div class="d-flex flex-row mt-3 justify-content-between">
+                        <div class="d-flex flex-row">
+                            <img class="profile-picture" src="~/images/pfp.png" />
+                            <div class="ms-2">
+                                <p class="username-txt inter-bold mb-0" title="@Model.Review.Username">@Model.Review.Username</p>
+                                <p class="mb-0">Last edited: @Model.Review.createdAt.Date.ToString("dd-MM-yyyy")</p>
+                            </div>
                         </div>
+
                         <div class="d-flex align-items-center align-self-auto">
-                            <div class="review-stars ms-2"></div>
-                            <p class="inter-bold mb-0 ms-1">@(Model.Review.StarRating)/2</p>
+                            @{
+                                float starRating = Model.Review.StarRating;
+                                float UIStarRating = starRating / 2;
+                            }
+
+                            <div class="review-stars">
+                                <ul class="create-review-star-row star-row-small">
+                                    @for (int str = 0; str < starRating; str++)
+                                    {
+                                        if (str % 2 == 0)
+                                        {
+                                            <li class="review-star-img">
+                                                <img class="review-star-small" src="~/icons/star-favorite-half.svg" />
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="review-star-img">
+                                                <img class="review-star-small create-review-star-end mirror" src="~/icons/star-favorite-half.svg" />
+                                            </li>
+                                        }
+                                    }
+                                    @for (float str = starRating++; str <= 9; str++)
+                                    {
+                                        if (str % 2 == 0)
+                                        {
+                                            <li class="review-star-img">
+                                                <img class="review-star-small" src="~/icons/star-favorite-half-empty.svg" />
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="review-star-img">
+                                                <img class="review-star-small create-review-star-end mirror" src="~/icons/star-favorite-half-empty.svg" />
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                            <p class="inter-bold mb-0 ms-1 me-1">@UIStarRating.ToString()/5</p>
                         </div>
                     </div>
-                    <p class="review-txt inter-light ms-4">@Model.Review.UserContext</p>
+                    <div class="d-flex flex-row">
+                        <p class="review-txt inter-light ms-4">@Model.Review.UserContext</p>
+
+                        <div class="d-flex flex-column">
+                            <button onclick="deleteReview('@Model.Game.Id')" class="review-delete-btn">
+                                <img class="review-delete-img filter-red" title="Delete review" src="~/icons/trash-can-svg.svg" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             }
             else

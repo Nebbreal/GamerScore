@@ -74,6 +74,33 @@ namespace GamerScore.Controllers
             _editGameViewModel.Genres = genreService.GetAllGenres();
             return View(_editGameViewModel);
         }
+        
+        [HttpPost]
+        public IActionResult DeleteGame(EditGameViewModel _editGameViewModel)
+        {
+            ModelState.Clear();
+            int gameId = _editGameViewModel.GameId;
+            
+
+            if (gameId < 1)
+            {
+                ModelState.AddModelError("No game selected", "Please select a game");
+            }
+
+            if (gameService.DeleteGame(gameId))
+            {
+                TempData["SuccessMessage"] = "Game successfully removed";
+            }
+            else
+            {
+                ModelState.AddModelError("Error", "A unexpected error has occured");
+            }
+
+            _editGameViewModel.AllGames = gameService.GetAllGames();
+            _editGameViewModel.Genres = genreService.GetAllGenres();
+
+            return View("EditGame", _editGameViewModel);
+        }
 
         public IActionResult AddGenre()
         {

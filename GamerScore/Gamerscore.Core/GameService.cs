@@ -44,5 +44,10 @@ namespace Gamerscore.Core
             List<int> parsedGenreIds = _genreIds.Select(int.Parse).ToList();
             return gameRepository.EditGame(_gameId ,_title, _description, _developer, _thumbnailImageUrl, _imageUrls, parsedGenreIds);
         }
+        
+        public bool DeleteGame(int _gameId)
+        {
+            return gameRepository.DeleteGame(_gameId);
+        }
     }
 }

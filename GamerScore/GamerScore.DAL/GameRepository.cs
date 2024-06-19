@@ -244,12 +244,12 @@ namespace GamerScore.DAL
             using (MySqlConnection connection = new(connectionString))
             {
                 connection.Open();
+                MessageLogger.Log("Connection opened");
+
                 MySqlTransaction transaction = connection.BeginTransaction();
                 string query = "";
                 try
                 {
-                    MessageLogger.Log("Connection opened");
-
                     //Create game in "game" table
                     query = "UPDATE game SET title = @title, description = @description, developer = @developer, thumbnailImageUrl = @thumbnailImageUrl WHERE id = @gameId";
                     MySqlCommand command = new MySqlCommand(query, connection);
@@ -339,7 +339,7 @@ namespace GamerScore.DAL
                 catch (Exception e)
                 {
                     transaction.Rollback();
-                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery for CreateGame Exception:" + e.ToString());
+                    MessageLogger.Log($"Exception caught trying to execute {query} for EditGame Exception:" + e.ToString());
                 }
                 finally
                 {
@@ -347,6 +347,76 @@ namespace GamerScore.DAL
                     MessageLogger.Log("Connection closed");
                 }
                 return false;
+            }
+        }
+    
+        public bool DeleteGame(int _gameId)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                MessageLogger.Log("Connection opened");
+
+                MySqlTransaction transaction = connection.BeginTransaction();
+                string query = "";
+
+                try
+                {
+                    //Clear the linked genres
+                    query = "DELETE FROM game_genre WHERE game_id = @gameId";
+
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+                    command.Transaction = transaction;
+
+                    command.ExecuteNonQuery();
+                    MessageLogger.Log("Genres cleared");
+
+                    //Clear the linked images
+                    query = "DELETE FROM game_image WHERE game_id = @gameId";
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+                    command.Transaction = transaction;
+
+                    command.ExecuteNonQuery();
+                    MessageLogger.Log("Images cleared");
+
+                    //Delete the linked reviews
+                    query = "DELETE FROM review WHERE game_id = @gameId";
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+                    command.Transaction = transaction;
+
+                    command.ExecuteNonQuery();
+                    MessageLogger.Log("Reviews cleared");
+
+                    //Delete the game
+                    query = "DELETE FROM game WHERE id = @gameId";
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@gameId", _gameId);
+                    command.Transaction = transaction;
+
+                    command.ExecuteNonQuery();
+                    MessageLogger.Log("Reviews cleared");
+
+                    transaction.Commit();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    MessageLogger.Log($"Exception caught trying to execute {query} for EditGame Exception:" + e.ToString());
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
             }
         }
     }

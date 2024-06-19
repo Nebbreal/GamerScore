@@ -30,7 +30,16 @@ namespace Gamerscore.Core
             {
                 return genreRepository.CreateGenre(_name, _imageUrl);
             }
+        }
 
+        public bool EditGenre(int _genreId, string _name, string? _imageUrl)
+        {
+            return genreRepository.EditGenre(_genreId, _name, _imageUrl);
+        }
+
+        public bool DeleteGenre(int _genreId)
+        {
+            return genreRepository.DeleteGenre(_genreId);
         }
     }
 }

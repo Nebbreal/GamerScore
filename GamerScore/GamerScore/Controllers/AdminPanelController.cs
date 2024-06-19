@@ -28,8 +28,8 @@ namespace GamerScore.Controllers
         {
             List<Genre> genres = genreService.GetAllGenres();
             
-            AddGameViewModel model = new(genres);
-            return View(model);
+            AddGameViewModel addGameviewModel = new(genres);
+            return View(addGameviewModel);
         }
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
@@ -63,6 +63,68 @@ namespace GamerScore.Controllers
                 _addGenreViewModel.ErrorMessage = "Name already exists or something went wrong";
                 return View(_addGenreViewModel);
             }
+        }
+
+        public IActionResult EditGenre()
+        {
+            EditGenreViewModel editGenreViewModel = new EditGenreViewModel();
+            List<Genre> genres = genreService.GetAllGenres();
+
+            editGenreViewModel.AllGenres = genres;
+
+            return View(editGenreViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditGenre(EditGenreViewModel editGenreViewModel)
+        {
+            if(editGenreViewModel.GenreId == 0)
+            {
+                ModelState.AddModelError("GenreId", "You must select a genre.");
+            }
+
+            if(ModelState.IsValid)
+            {
+                int genreId = editGenreViewModel.GenreId;
+                string genreName = editGenreViewModel.GenreName;
+                string? genreImageUrl = editGenreViewModel.GenreImageUrl;
+                if (genreService.EditGenre(genreId, genreName, genreImageUrl))
+                {
+                    TempData["SuccessMessage"] = $"Genre {genreName} successfully edited";
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "A unexpected error has occured");
+                }
+            }
+
+            editGenreViewModel.AllGenres = genreService.GetAllGenres();
+
+            return View("EditGenre", editGenreViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteGenre(EditGenreViewModel editGenreViewModel)
+        {
+            ModelState.Clear();
+
+            if (editGenreViewModel.GenreId == 0)
+            {
+                ModelState.AddModelError("No genre selected", "Please select a genre");
+            }
+
+            if (genreService.DeleteGenre(editGenreViewModel.GenreId))
+            {
+                TempData["SuccessMessage"] = "Genre successfully removed";
+            }
+            else
+            {
+                ModelState.AddModelError("Error", "A unexpected error has occured");
+            }
+
+            editGenreViewModel.AllGenres = genreService.GetAllGenres();
+
+            return View("EditGenre", editGenreViewModel);
         }
     }
 }

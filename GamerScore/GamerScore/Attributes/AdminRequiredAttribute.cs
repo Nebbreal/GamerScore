@@ -10,7 +10,7 @@ namespace GamerScore.Attributes
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ITokenService tokenService = context.HttpContext.RequestServices.GetService<ITokenService>();
+            ITokenService tokenService = context.HttpContext.RequestServices.GetService<ITokenService>() ?? throw new InvalidOperationException("ITokenService not found in AdminRequiredAttribute");
 
             if (context.HttpContext.Request.Cookies.TryGetValue("jwtToken", out string? jwtToken))
             {

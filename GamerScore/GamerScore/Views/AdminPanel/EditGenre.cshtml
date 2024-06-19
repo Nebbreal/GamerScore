@@ -1,0 +1,79 @@
+﻿@model EditGenreViewModel
+
+@{
+    ViewData["Title"] = "Edit genre page";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/addItem.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Edit a genre</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="error-box success-bg">
+        <p class="inter-bold mb-0">@TempData["SuccessMessage"]</p>
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    var allErrors = ViewData.ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+
+    <div class="error-box error-bg">
+        @foreach (string errorMessage in allErrors)
+        {
+            <p class="inter-bold mb-0">@errorMessage</p>
+        }
+        
+    </div>
+}
+
+<form id="editGenreForm" method="post" asp-action="EditGenre" asp-controller="AdminPanel" class="mt-3">
+    <h2 class="header-txt inter-bold mb-1">Genre to edit</h2>
+    <div id="genreList">
+        <div class="d-flex flex-row align-items-center">
+            <select required asp-for="GenreId" id="genre">
+                <option hidden disabled selected value="">Choose a genre to edit</option>
+                @foreach (var genre in Model.AllGenres)
+                {
+                    <option value="@genre.Id" data-genreName="@genre.Name" data-genreImageUrl="@genre.ImageUrl">@genre.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <h2 class="header-txt inter-bold mb-1">Name</h2>
+    <input id="genreName" asp-for="GenreName" required placeholder="Enter the name of the genre here..." />
+
+    <h2 class="header-txt inter-bold mb-1">Image url</h2>
+    <input id="genreImageUrl" asp-for="GenreImageUrl" placeholder="Enter the image url of the genre here..." />
+
+    <div class="d-flex mt-2 flex-row align-items-center">
+        <button type="submit" class="action-button primary-bg d-flex justify-content-center align-items-center ">
+            <p class="mb-0">Save</p>
+        </button>
+
+        <a asp-action="Panel" asp-controller="AdminPanel" class="action-button primary-bg d-flex justify-content-center align-items-center ms-3">
+            <p class="mb-0">Cancel</p>
+        </a>
+
+    </div>
+
+</form>
+
+<form method="post" asp-action="DeleteGenre" asp-controller="AdminPanel">
+    <input asp-for="GenreId" id="deleteFormGenreId" hidden />
+    <button type="submit" class="action-button error-bg d-flex justify-content-center align-items-center mt-2">
+        <p class="mb-0">Delete genre</p>
+    </button>
+</form>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <script src="~/js/EditGenre.js" asp-append-version="true"></script>
+}

@@ -41,10 +41,18 @@
         <div id="genreList">
             <div class="d-flex flex-row align-items-center">
                 <select multiple required asp-for="SelectedGenres" id="genre">
-                    @foreach (var genre in Model.Genres)
+                    @if (Model.Genres != null)
                     {
-                        <option value="@genre.Id">@genre.Name</option>
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
                     }
+                    else
+                    {
+                        <option disabled value="">No genres available</option>
+                    }
+
                 </select>
             </div>
         </div>

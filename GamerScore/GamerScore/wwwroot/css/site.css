@@ -103,6 +103,10 @@ body {
     color: #7970CA
 }
 
+.red-txt {
+    color: #F35353;
+}
+
 /*General css*/
 .title-txt{
     font-size: 3rem;

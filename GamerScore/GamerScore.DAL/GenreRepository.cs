@@ -163,7 +163,7 @@ namespace GamerScore.DAL
             return false;
         }
 
-        public bool DeleteGenre(int _genreId)
+        public bool DeleteGenre(int _genreId) //ToDo: remove forgeign keys
         {
             string query = "DELETE FROM genre WHERE id = @genreId";
 

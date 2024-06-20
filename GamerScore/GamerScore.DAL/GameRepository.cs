@@ -136,6 +136,50 @@ namespace GamerScore.DAL
             }   
         }
 
+        public List<Game> GetGamesBySearchQuery(string _searchQuery)
+        {
+            string query = "SELECT id, title, description, developer, thumbnailImageUrl FROM game WHERE title LIKE CONCAT('%', @searchQuery, '%');";
+            List<Game> games = new List<Game>();
+
+            using (MySqlConnection connection = new(connectionString))
+            {
+                try
+                {
+                    using MySqlCommand command = new MySqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@searchQuery", _searchQuery);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    MySqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Game game = new Game();
+
+                        game.Id = reader.GetInt32("id");
+                        game.Title = reader.GetString("title");
+                        game.Description = reader.GetString("description");
+                        game.Developer = reader.GetString("developer");
+                        game.ThumbnailImageUrl = reader.GetString("thumbnailImageUrl");
+
+                        games.Add(game);
+                    }
+                    return games;
+                }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute gameInfoQuery: {query} Exception:" + e.ToString());
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+                return games;
+            }
+        }
+
         public bool CreateGame(string _title, string _description, string _developer, string _thumbnailImageUrl, List<string> _imageUrls, List<int> _genreIds)
         {
             using (MySqlConnection connection = new(connectionString))

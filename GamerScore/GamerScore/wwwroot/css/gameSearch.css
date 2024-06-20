@@ -1,0 +1,32 @@
+﻿.game-container {
+    border-radius: 0.1875rem;
+    background-color: #D3D1E3;
+    padding: 1rem;
+}
+
+.game-container:hover div {
+    opacity: 0.5;
+}
+
+.thumbnail-img {
+    height: 15.4375rem;
+    width: 9.49625rem;
+}
+
+.game-description{
+    width: 68rem;
+
+    /*Overflow handling*/
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
+.game-text{
+    color: black;
+}

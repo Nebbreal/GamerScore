@@ -5,6 +5,7 @@ using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace GamerScore.Controllers
 {
@@ -79,10 +80,26 @@ namespace GamerScore.Controllers
             var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken? jwtSecurityToken = handler.CanReadToken(jwtToken) ? handler.ReadJwtToken(jwtToken) : null;
 
-            int userId = -1;
+            Claim? userIdClaim;
+
             if (jwtSecurityToken != null)
             {
-                userId = int.Parse(jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "AccountId").Value); //ToDo: betere manier hiervoor?
+                userIdClaim = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "AccountId");
+            }
+            else
+            {
+                userIdClaim = null;
+            }
+            
+            
+            int userId = -1;
+            if (userIdClaim != null)
+            {
+                userId = int.Parse(userIdClaim.Value);
+            }
+            else
+            {
+                Response.Cookies.Delete("jwtToken");
             }
 
             return userId;

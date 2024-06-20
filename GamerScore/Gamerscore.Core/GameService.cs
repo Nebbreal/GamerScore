@@ -33,6 +33,11 @@ namespace Gamerscore.Core
             }
         }
 
+        public List<Game> GetGamesBySearchQuery(string _searchQuery)
+        {
+            return gameRepository.GetGamesBySearchQuery(_searchQuery);
+        }
+
         public bool CreateGame(string _title, string _description, string _developer, string _thumbnailImageUrl, List<string> _imageUrls, List<string> _genreIds)
         {
             List<int> parsedGenreIds = _genreIds.Select(int.Parse).ToList();

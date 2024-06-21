@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gamerscore.Core.Interfaces
+namespace Gamerscore.Core.Interfaces.Repositories
 {
     public interface IAccountRepository
     {

@@ -1,0 +1,116 @@
+﻿@model EditGameViewModel
+@{
+    ViewData["Title"] = "Edit Game page";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/addItem.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Edit a game</h1>
+<h2 class="inter-bold mb-1 red-txt">WARNING: EDITING A GAME WILL CURRENTLY OVERRIDE ALL LINKED IMAGES AND GENRES EVEN IF NONE ARE SELECTED</h2>
+<div class="mt-3">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="error-box success-bg">
+            <p class="inter-bold mb-0">@TempData["SuccessMessage"]</p>
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        var allErrors = ViewData.ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+
+        <div class="error-box error-bg">
+            @foreach (string errorMessage in allErrors)
+            {
+                <p class="inter-bold mb-0">@errorMessage</p>
+            }
+        </div>
+    }
+
+    <form method="post" asp-action="EditGame" asp-controller="AdminPanel">
+        <h2 class="header-txt inter-bold mb-1">Game to edit</h2>
+        <div id="genreList">
+            <div class="d-flex flex-row align-items-center">
+                <select required asp-for="GameId" id="game">
+                    <option hidden disabled selected value="">Choose a game to edit</option>
+                    @foreach (var game in Model.AllGames)
+                    {
+                        <option value="@game.Id" data-gameName="@game.Title" data-gameDescription="@game.Description" data-gameDeveloper="@game.Developer" data-gameImageUrl="@game.ThumbnailImageUrl">@game.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <h2 class="header-txt inter-bold mb-1">Name</h2>
+        <input id="gameName" required asp-for="Name" placeholder="Enter the name of the game here..." />
+
+        <h2 class="header-txt inter-bold mb-1">Description</h2>
+        <textarea id="gameDescription" required maxlength="900" asp-for=Description class="description-input" placeholder="Enter the description of the game here..."></textarea>
+
+        <h2 class="header-txt inter-bold mb-1">Developer</h2>
+        <input id="gameDeveloper" required asp-for="Developer" placeholder="Enter the name of the developer of the game here..." />
+
+        <h2 class="header-txt inter-bold mb-1">Thumbnail image url</h2>
+        <input id="gameThumbnailImageUrl" required asp-for="ThumbnailImageUrl" placeholder="Enter the thumbnail image url of the game here..." />
+
+        <h2 class="header-txt inter-bold mb-1">Image url</h2>
+        <div id="imageUrlList">
+            <div class="d-flex flex-row align-content-center">
+                <input required name="ImageUrl[]" placeholder="Enter the image url of the game here..." />
+                <button class="remove-button d-flex justify-content-center align-items-center">
+                    <p class="mb-0">X</p>
+                </button>
+            </div>
+        </div>
+
+        <button class="add-button mt-1 d-flex justify-content-center align-items-center">
+            <p class="mb-0">+</p>
+        </button>
+
+        <h2 class="header-txt inter-bold mb-1">Genre</h2>
+        <div id="genreList">
+            <div class="d-flex flex-row align-items-center">
+                <select multiple required asp-for="SelectedGenres" id="genre">
+                    @if (Model.Genres != null)
+                    {
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
+                    }
+                    else
+                    {
+                        <option disabled value="">No genres available</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex mt-2 flex-row align-items-center">
+            <button type="submit" class="action-button primary-bg d-flex justify-content-center align-items-center ">
+                <p class="mb-0">Save</p>
+            </button>
+
+            <a asp-action="Panel" asp-controller="AdminPanel" class="action-button primary-bg d-flex justify-content-center align-items-center ms-3">
+                <p class="mb-0">Cancel</p>
+            </a>
+        </div>
+    </form>
+</div>
+
+<form method="post" asp-action="DeleteGame" asp-controller="AdminPanel">
+    <input asp-for="GameId" id="deleteFormGameId" hidden />
+    <button type="submit" class="action-button error-bg d-flex justify-content-center align-items-center mt-2">
+        <p class="mb-0">Delete genre</p>
+    </button>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <script src="~/js/EditGame.js" asp-append-version="true"></script>
+}

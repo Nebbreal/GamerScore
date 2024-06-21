@@ -14,7 +14,7 @@
         <input required asp-for="Name" placeholder="Enter the name of the game here..." />
 
         <h2 class="header-txt inter-bold mb-1">Description</h2>
-        <textarea required asp-for=Description class="description-input" placeholder="Enter the description of the game here..."></textarea>
+        <textarea required asp-for="Description" maxlength="900" class="description-input" placeholder="Enter the description of the game here..."></textarea>
 
         <h2 class="header-txt inter-bold mb-1">Developer</h2>
         <input required asp-for="Developer" placeholder="Enter the name of the developer of the game here..." />
@@ -41,13 +41,20 @@
         <div id="genreList">
             <div class="d-flex flex-row align-items-center">
                 <select multiple required asp-for="SelectedGenres" id="genre">
-                    @foreach (var genre in Model.Genres)
+                    @if (Model.Genres != null)
                     {
-                        <option value="@genre.Id">@genre.Name</option>
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
                     }
+                    else
+                    {
+                        <option disabled value="">No genres available</option>
+                    }
+
                 </select>
             </div>
-            
         </div>
 
         <div class="d-flex mt-2 flex-row align-items-center">

@@ -1,0 +1,33 @@
+﻿@model GameSearchViewModel
+
+@using GamerScore.Domain;
+
+@{
+    ViewData["Title"] = "Game search";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/gameSearch.css" asp-append-version="true" />
+}
+
+<h1 class="title-txt fst-italic inter-bold">Showing results for "@Model.SearchQuery"</h1>
+
+@if (Model == null || Model.QueriedGames == null)
+{
+    <p class="inter-bold">No games found</p>
+}
+else
+{
+    @foreach (Game game in Model.QueriedGames)
+    {
+        <a class="d-flex flex-row text-decoration-none game-container mb-1" asp-action="Game" asp-controller="Game" asp-route-gameId="@game.Id">
+            <img class="thumbnail-img" src="@game.ThumbnailImageUrl" />
+            <div class="ms-2">
+                <h3 class="inter-bold game-text mb-0">@game.Title</h3>
+                <p class="inter-regular game-text">@game.Developer</p>
+                <p class="inter-light game-description game-text">@game.Description</p>
+            </div>
+        </a>
+    }
+}
+

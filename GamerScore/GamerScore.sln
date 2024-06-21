@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gamerscore.Core", "Gamersco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamerScore.DAL", "GamerScore.DAL\GamerScore.DAL.csproj", "{496D29C8-66AA-4B47-853C-DE374B4075D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamerScore.DTO", "GamerScore.DTO\GamerScore.DTO.csproj", "{23CF944F-B6DB-456F-BAE2-51C15190E967}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamerScore.Domain", "GamerScore.DTO\GamerScore.Domain.csproj", "{23CF944F-B6DB-456F-BAE2-51C15190E967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerScore.Exceptions", "GamerScore.Exceptions\GamerScore.Exceptions.csproj", "{03DBB8F0-D54D-491D-A573-D168D2E13C72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamerScore.Exceptions", "GamerScore.Exceptions\GamerScore.Exceptions.csproj", "{03DBB8F0-D54D-491D-A573-D168D2E13C72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
 ﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+using Gamerscore.Core.Interfaces.Repositories;
 using Gamerscore.DTO;
 using MySqlConnector;
 
@@ -126,6 +126,74 @@ namespace GamerScore.DAL
                 }
                 return false;
             }
+        }
+
+        public bool EditGenre(int _genreId, string _name, string? _imageUrl)
+        {
+            string query = "UPDATE genre SET name = @name, imageUrl = @imageUrl WHERE id = @genreId";
+
+            using(MySqlConnection connection = new(connectionString))
+            {
+                try
+                {
+                    MySqlCommand command = new MySqlCommand(query, connection);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    command.Parameters.AddWithValue("@genreId", _genreId);
+                    command.Parameters.AddWithValue("@name", _name);
+                    command.Parameters.AddWithValue("@imageUrl", _imageUrl ?? (object)DBNull.Value);
+
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                }
+                finally 
+                { 
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+            }
+
+            return false;
+        }
+
+        public bool DeleteGenre(int _genreId) //ToDo: remove forgeign keys
+        {
+            string query = "DELETE FROM genre WHERE id = @genreId";
+
+            using (MySqlConnection connection = new(connectionString))
+            {
+                try
+                {
+                    MySqlCommand command = new MySqlCommand(query, connection);
+
+                    connection.Open();
+                    MessageLogger.Log("Connection opened");
+
+                    command.Parameters.AddWithValue("@genreId", _genreId);
+
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    MessageLogger.Log($"Exception caught trying to execute query: {query} Exception:" + e.ToString());
+                }
+                finally
+                {
+                    connection.Close();
+                    MessageLogger.Log("Connection closed");
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using Gamerscore.DTO.Enums;
-using Gamerscore.Core.Interfaces;
 using Gamerscore.DTO;
 using Microsoft.AspNetCore.Identity;
+using Gamerscore.Core.Interfaces.Services;
+using Gamerscore.Core.Interfaces.Repositories;
 
 namespace Gamerscore.Core
 {
-    public class AccountManager
+    public class AccountService : IAccountService
     {
         private IAccountRepository accountRepository;
-        public AccountManager(IAccountRepository _accountRepository)
+        public AccountService(IAccountRepository _accountRepository)
         {
             accountRepository = _accountRepository;
         }
@@ -38,8 +39,8 @@ namespace Gamerscore.Core
                 User user = new(_email);
                 PasswordHasher<User> passwordHasher = new();
                 PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, passwordHash, _password);
-               
-                if(result == PasswordVerificationResult.Success)
+
+                if (result == PasswordVerificationResult.Success)
                 {
                     User userInfo = accountRepository.GetAccountInfo(_email);
                     if (userInfo.Id == null)

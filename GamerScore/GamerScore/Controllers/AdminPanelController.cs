@@ -1,64 +1,105 @@
-﻿using Gamerscore.Core;
-using Gamerscore.Core.Interfaces;
+﻿using Gamerscore.Core.Interfaces.Services;
 using Gamerscore.DTO;
+using GamerScore.Attributes;
 using GamerScore.Models;
-using GamerScore.Options;
-using GamerScore.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace GamerScore.Controllers
 {
+    [AdminRequired]
     public class AdminPanelController : Controller
     {
-        private IGameRepository gameRepository;
-        private IGenreRepository genreRepository;
-        private readonly JwtSettings jwtSettings;
-        public AdminPanelController(IGameRepository gameRepository, IGenreRepository genreRepository, IOptions<JwtSettings> jwt)
+        private IGameService gameService;
+        private IGenreService genreService;
+        private ITokenService tokenService;
+        public AdminPanelController(IGameService _gameService, IGenreService _genreService, ITokenService _tokenService)
         {
-            this.gameRepository = gameRepository;
-            this.genreRepository = genreRepository;
-            this.jwtSettings = jwt.Value;
+            gameService = _gameService;
+            genreService = _genreService;
+            tokenService = _tokenService;
         }
 
         public IActionResult Panel()
         {
-            //Validate if an admin is logged in
-            bool isAdmin = false;
-            var jwtToken = Request.Cookies["jwtToken"];
-            if (jwtToken != null)
-            {
-                TokenService tokenService = new(jwtSettings);
-                isAdmin = tokenService.ValidateAdminLevelJwt(jwtToken);
-            }
-            
-            if(isAdmin == true)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Home", "Home");
-            }
-            
+            return View();
         }
 
         public IActionResult AddGame()
         {
-            GenreManager genreManager = new(genreRepository);
-
-            List<Genre> genres = genreManager.GetAllGenres();
+            List<Genre> genres = genreService.GetAllGenres();
             
-            AddGameViewModel model = new(genres);
-            return View(model);
+            AddGameViewModel addGameviewModel = new(genres);
+            return View(addGameviewModel);
         }
         [HttpPost]
         public IActionResult AddGame(AddGameViewModel _AddGameViewModel)
         {
-            GameManager gameManager = new GameManager(gameRepository);
-
-            gameManager.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
+            gameService.CreateGame(_AddGameViewModel.Name, _AddGameViewModel.Description, _AddGameViewModel.Developer, _AddGameViewModel.ThumbnailImageUrl, _AddGameViewModel.ImageUrl, _AddGameViewModel.SelectedGenres);
             return RedirectToAction("Panel");
+        }
+
+        public IActionResult EditGame()
+        {
+            EditGameViewModel editGameViewModel = new EditGameViewModel();
+            editGameViewModel.AllGames = gameService.GetAllGames();
+            editGameViewModel.Genres = genreService.GetAllGenres();
+
+            return View(editGameViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditGame(EditGameViewModel _editGameViewModel)
+        {
+            int gameId = _editGameViewModel.GameId;
+            string title = _editGameViewModel.Name;
+            string description = _editGameViewModel.Description;
+            string developer = _editGameViewModel.Developer;
+            string thumbnailImageUrl = _editGameViewModel.ThumbnailImageUrl;
+            List<string>? imageUrls = _editGameViewModel.ImageUrl;
+            List<string>? selectedGenres = _editGameViewModel.SelectedGenres;
+
+            if (ModelState.IsValid)
+            {
+                if (gameService.EditGame(gameId, title, description, developer, thumbnailImageUrl, imageUrls, selectedGenres))
+                {
+                    TempData["SuccessMessage"] = "Game successfully edited";
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "An unexpected error has occured");
+                }
+            }
+            
+            _editGameViewModel.AllGames = gameService.GetAllGames();
+            _editGameViewModel.Genres = genreService.GetAllGenres();
+            return View(_editGameViewModel);
+        }
+        
+        [HttpPost]
+        public IActionResult DeleteGame(EditGameViewModel _editGameViewModel)
+        {
+            ModelState.Clear();
+            int gameId = _editGameViewModel.GameId;
+            
+
+            if (gameId < 1)
+            {
+                ModelState.AddModelError("No game selected", "Please select a game");
+            }
+
+            if (gameService.DeleteGame(gameId))
+            {
+                TempData["SuccessMessage"] = "Game successfully removed";
+            }
+            else
+            {
+                ModelState.AddModelError("Error", "A unexpected error has occured");
+            }
+
+            _editGameViewModel.AllGames = gameService.GetAllGames();
+            _editGameViewModel.Genres = genreService.GetAllGenres();
+
+            return View("EditGame", _editGameViewModel);
         }
 
         public IActionResult AddGenre()
@@ -75,9 +116,7 @@ namespace GamerScore.Controllers
                 return View(_addGenreViewModel);
             }
 
-            GenreManager genreManager = new GenreManager(genreRepository);
-
-            if(genreManager.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))
+            if(genreService.CreateGenre(_addGenreViewModel.Name, _addGenreViewModel.ImageUrl))
             {
                 AddGenreViewModel successModel = new AddGenreViewModel();
                 successModel.SuccessMessage = "Genre creation success!";
@@ -88,6 +127,68 @@ namespace GamerScore.Controllers
                 _addGenreViewModel.ErrorMessage = "Name already exists or something went wrong";
                 return View(_addGenreViewModel);
             }
+        }
+
+        public IActionResult EditGenre()
+        {
+            EditGenreViewModel editGenreViewModel = new EditGenreViewModel();
+            List<Genre> genres = genreService.GetAllGenres();
+
+            editGenreViewModel.AllGenres = genres;
+
+            return View(editGenreViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditGenre(EditGenreViewModel _editGenreViewModel)
+        {
+            if(_editGenreViewModel.GenreId == 0)
+            {
+                ModelState.AddModelError("GenreId", "You must select a genre.");
+            }
+
+            if(ModelState.IsValid)
+            {
+                int genreId = _editGenreViewModel.GenreId;
+                string genreName = _editGenreViewModel.GenreName;
+                string? genreImageUrl = _editGenreViewModel.GenreImageUrl;
+                if (genreService.EditGenre(genreId, genreName, genreImageUrl))
+                {
+                    TempData["SuccessMessage"] = $"Genre {genreName} successfully edited";
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "A unexpected error has occured");
+                }
+            }
+
+            _editGenreViewModel.AllGenres = genreService.GetAllGenres();
+
+            return View("EditGenre", _editGenreViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteGenre(EditGenreViewModel _editGenreViewModel)
+        {
+            ModelState.Clear();
+
+            if (_editGenreViewModel.GenreId == 0)
+            {
+                ModelState.AddModelError("No genre selected", "Please select a genre");
+            }
+
+            if (genreService.DeleteGenre(_editGenreViewModel.GenreId))
+            {
+                TempData["SuccessMessage"] = "Genre successfully removed";
+            }
+            else
+            {
+                ModelState.AddModelError("Error", "A unexpected error has occured");
+            }
+
+            _editGenreViewModel.AllGenres = genreService.GetAllGenres();
+
+            return View("EditGenre", _editGenreViewModel);
         }
     }
 }

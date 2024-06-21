@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GamerScore.DTO\GamerScore.DTO.csproj" />
+    <ProjectReference Include="..\GamerScore.DTO\GamerScore.Domain.csproj" />
     <ProjectReference Include="..\GamerScore.Exceptions\GamerScore.Exceptions.csproj" />
   </ItemGroup>
 

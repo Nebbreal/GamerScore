@@ -46,15 +46,18 @@
                             <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
                         </li>
                         <li class="nav-item ps-5">
-                            <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="" asp-action="">Categories</a>
+                            <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="Categories" asp-action="Overview">Categories</a>
                         </li>
                         <li class="nav-item ps-5">
-                            <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="" asp-action="">News</a>
+                            <a class="nav-link inter-regular text-dark" asp-area="" asp-controller="News" asp-action="News">News</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item align-self-center">
-                            <input class="search-input inter-regular input-group-text" placeholder="Search for a game" />
+                            <form type="post" asp-action="GameSearch" asp-controller="Search">
+                                <input name="searchQuery" class="search-input inter-regular input-group-text" placeholder="Search for a game" />
+                                <input type="submit" hidden />
+                            </form>
                         </li>
                     </ul>
                     @if (isLoggedIn)
@@ -68,7 +71,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item-size dropdown-item bg-transparent" href="#">
+                                            <a class="dropdown-item-size dropdown-item bg-transparent" asp-action="UserSettings" asp-controller="Settings">
                                                 <div class="d-flex align-items-center">
                                                     <img class="dropdown-icon" src="~/icons/cog.svg" />
                                                     <p class="dropdown-text text-black">Settings</p>

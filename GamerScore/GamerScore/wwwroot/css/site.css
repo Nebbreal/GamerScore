@@ -103,6 +103,10 @@ body {
     color: #7970CA
 }
 
+.red-txt {
+    color: #F35353;
+}
+
 /*General css*/
 .title-txt{
     font-size: 3rem;
@@ -132,4 +136,8 @@ body {
     border-radius: .2rem;
 
     text-indent: 0.5rem;
+}
+
+.filter-red {
+    filter: invert(27%) sepia(79%) saturate(7484%) hue-rotate(355deg) brightness(104%) contrast(123%);
 }

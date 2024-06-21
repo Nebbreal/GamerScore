@@ -1,8 +1,8 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.DTO.Enums;
-using Gamerscore.Core.Interfaces;
 using Gamerscore.DTO;
 using MySqlConnector;
+using Gamerscore.Core.Interfaces.Repositories;
 
 namespace GamerScore.DAL
 {

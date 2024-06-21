@@ -46,7 +46,7 @@ namespace GamerScore.Controllers
 
             if (userId < 1)
             {
-                gameViewModel.ErrorMessage = "Error creating review"; //ToDo: implement this somehow
+                gameViewModel.ErrorMessage = "Error creating review";
                 return RedirectToAction("Game", new { gameId = review.GameId });
             }
 

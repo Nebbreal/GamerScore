@@ -78,7 +78,7 @@ namespace GamerScore.Controllers
         [HttpPost]
         public IActionResult SignUp(SignUpViewModel _SignUpViewModel)
         {
-            if(accountService.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))//ToDo: is there a better way to do this? There is, throwing exceptions
+            if(accountService.CreateAccount(_SignUpViewModel.Username, _SignUpViewModel.Email, _SignUpViewModel.Password))
             {
                 return RedirectToAction("Login");
             }

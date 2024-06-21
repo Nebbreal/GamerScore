@@ -1,6 +1,6 @@
 ﻿using Gamerscore.Core.Interfaces.Services;
 using GamerScore.Attributes;
-using GamerScore.DTO;
+using GamerScore.Domain;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;

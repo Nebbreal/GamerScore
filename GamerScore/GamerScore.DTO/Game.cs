@@ -1,4 +1,4 @@
-﻿namespace GamerScore.DTO
+﻿namespace GamerScore.Domain
 {
     public class Game
     {

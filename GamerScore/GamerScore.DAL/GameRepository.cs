@@ -1,6 +1,6 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces.Repositories;
-using GamerScore.DTO;
+using GamerScore.Domain;
 using GamerScore.Exceptions;
 using MySqlConnector;
 

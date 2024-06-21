@@ -1,5 +1,5 @@
 using Gamerscore.Core.Interfaces.Services;
-using GamerScore.DTO;
+using GamerScore.Domain;
 using GamerScore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

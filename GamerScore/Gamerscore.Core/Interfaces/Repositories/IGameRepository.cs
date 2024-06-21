@@ -1,4 +1,4 @@
-﻿using GamerScore.DTO;
+﻿using GamerScore.Domain;
 
 namespace Gamerscore.Core.Interfaces.Repositories
 {

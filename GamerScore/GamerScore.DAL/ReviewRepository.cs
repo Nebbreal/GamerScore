@@ -1,7 +1,7 @@
 ﻿using Gamerscore.Core;
 using Gamerscore.Core.Interfaces.Repositories;
 using Gamerscore.DTO;
-using GamerScore.DTO;
+using GamerScore.Domain;
 using GamerScore.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;

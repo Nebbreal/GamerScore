@@ -1,4 +1,4 @@
-﻿using GamerScore.DTO;
+﻿using GamerScore.Domain;
 using System.Drawing;
 
 namespace GamerScore.Models

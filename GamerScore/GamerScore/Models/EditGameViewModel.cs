@@ -1,5 +1,5 @@
 ﻿using Gamerscore.DTO;
-using GamerScore.DTO;
+using GamerScore.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace GamerScore.Models

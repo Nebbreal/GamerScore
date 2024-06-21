@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamerScore.DTO
+namespace GamerScore.Domain
 {
     public class Review
     {

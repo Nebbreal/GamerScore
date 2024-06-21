@@ -1,6 +1,6 @@
 ﻿using Gamerscore.Core.Interfaces.Repositories;
 using Gamerscore.Core.Interfaces.Services;
-using GamerScore.DTO;
+using GamerScore.Domain;
 
 namespace Gamerscore.Core
 {
